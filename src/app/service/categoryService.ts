@@ -12,6 +12,6 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   public getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiServerUrl}/quiz/categories`);
+    return this.http.get<string[]>(`${this.apiServerUrl}/quiz/category`);
   }
 }

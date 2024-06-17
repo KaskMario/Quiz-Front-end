@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Valida
 import {NgForOf, NgIf} from "@angular/common";
 import {CategoryService} from "../../service/categoryService";
 
+
 @Component({
   selector: 'create-quiz',
   standalone: true,
@@ -12,7 +13,8 @@ import {CategoryService} from "../../service/categoryService";
     NgIf,
     FormsModule,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+
   ],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css'
