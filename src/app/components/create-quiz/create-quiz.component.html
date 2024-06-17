@@ -1,0 +1,21 @@
+<p>create-quiz works!</p>
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="category">Select Category:</label>
+    <select id="category" formControlName="category">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="numberOfQuestions">Number of Questions:</label>
+    <input type="number" id="numberOfQuestions" formControlName="numberOfQuestions">
+  </div>
+
+  <div>
+    <label for="title">Quiz Title:</label>
+    <input type="text" id="title" formControlName="title">
+  </div>
+
+  <button type="submit">Start Quiz</button>
+</form>
