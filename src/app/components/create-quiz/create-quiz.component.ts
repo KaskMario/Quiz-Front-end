@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Quiz} from "../../models/quiz";
 import {QuizService} from "../../service/quizService";
 import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-import {CategoryService} from "../../service/categoryService";
-import {HttpErrorResponse} from "@angular/common/http";
+import {QuizPlayerComponent} from "../quiz-player/quiz-player.component";
 
 
 @Component({
@@ -15,6 +13,7 @@ import {HttpErrorResponse} from "@angular/common/http";
     FormsModule,
     ReactiveFormsModule,
     NgForOf,
+    QuizPlayerComponent,
 
   ],
   templateUrl: './create-quiz.component.html',
@@ -22,30 +21,25 @@ import {HttpErrorResponse} from "@angular/common/http";
 })
 export class CreateQuizComponent implements OnInit{
 
-  quizForm: FormGroup;
   categories: string[] = [];
+  quizForm: FormGroup;
+  questions: any[] = [];
+  quizCreated: boolean = false; // Flag to control visibility of QuizPlayerComponent
 
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private categoryService: CategoryService,
-    private quizService: QuizService
-  ) {
+  constructor(private formBuilder: FormBuilder, private quizService: QuizService) {
     this.quizForm = this.formBuilder.group({
       category: ['', Validators.required],
-      numberOfQuestions: ['', [Validators.required, Validators.min(1)]],
-      title: ['', Validators.required]
+      numberOfQuestions: [1, [Validators.required, Validators.min(1)]]
     });
   }
 
   ngOnInit(): void {
-    this.loadCategories();
-
+    this.fetchCategories();
   }
 
-  loadCategories(): void {
-    this.categoryService.getCategories().subscribe(
-      (categories: string[]) => {
+  fetchCategories(): void {
+    this.quizService.getCategories().subscribe(
+      (categories) => {
         this.categories = categories;
       },
       (error) => {
@@ -53,30 +47,27 @@ export class CreateQuizComponent implements OnInit{
       }
     );
   }
+
   onSubmit(): void {
-    const { category, numberOfQuestions, title } = this.quizForm.value;
-
-    console.log('Payload:', { category, numberOfQuestions, title });// FOR troubleshooting
-
-    if (category && numberOfQuestions && title) {
-      this.quizService.createQuiz(category, numberOfQuestions, title).subscribe(
-        (response) => {
-          console.log('Quiz created successfully:', response);
-        },
-        (error) => {
-          console.error('Failed to create quiz:', error);
-          if (error instanceof HttpErrorResponse) {
-            console.error('Error details for troubleshooting:', {
-              message: error.message,
-              status: error.status,
-              error: error.error
-            });
-          }
-        }
-      );
-    } else {
-      console.error('All fields are required');
+    if (this.quizForm.valid) {
+      const category = this.quizForm.value.category;
+      const numberOfQuestions = this.quizForm.value.numberOfQuestions;
+      console.log('Submitting:', { category, numberOfQuestions });
+      this.fetchQuizQuestions(category, numberOfQuestions);
     }
   }
 
+  fetchQuizQuestions(category: string, numberOfQuestions: number): void {
+    console.log('Fetching Questions:', { category, numberOfQuestions });
+    this.quizService.getQuizQuestions(category, numberOfQuestions).subscribe(
+      (questions) => {
+        this.questions = questions;
+        console.log('Quiz Questions:', this.questions);
+        this.quizCreated = true; // Set flag to true to show QuizPlayerComponent
+      },
+      (error) => {
+        console.error('Failed to fetch quiz questions', error);
+      }
+    );
+  }
 }

@@ -1,29 +1,19 @@
-<form [formGroup]="quizForm" (ngSubmit)="onSubmit()" class="container mt-5">
-  <div class="form-group">
-    <label for="category" class="form-label">Category:</label>
-    <select id="category" formControlName="category" class="form-control">
-      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-    </select>
-    <div *ngIf="quizForm.get('category')?.invalid && quizForm.get('category')?.touched" class="text-danger">
-      Category is required.
+<div class="container mt-4">
+  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <select id="category" class="form-control" formControlName="category" required>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label for="numberOfQuestions" class="form-label">Number of Questions:</label>
-    <input id="numberOfQuestions" type="number" formControlName="numberOfQuestions" class="form-control">
-    <div *ngIf="quizForm.get('numberOfQuestions')?.invalid && quizForm.get('numberOfQuestions')?.touched" class="text-danger">
-      Please enter a valid number of questions.
+    <div class="form-group">
+      <label for="numberOfQuestions">Number of Questions:</label>
+      <input type="number" id="numberOfQuestions" class="form-control" formControlName="numberOfQuestions" required>
     </div>
-  </div>
+    <button type="submit" class="btn btn-primary">Create Quiz</button>
+  </form>
 
-  <div class="form-group">
-    <label for="title" class="form-label">Title:</label>
-    <input id="title" formControlName="title" class="form-control">
-    <div *ngIf="quizForm.get('title')?.invalid && quizForm.get('title')?.touched" class="text-danger">
-      Title is required.
-    </div>
+  <div *ngIf="quizCreated">
+    <quiz-player [questions]="questions"></quiz-player>
   </div>
-
-  <button type="submit" class="btn btn-primary mt-3" [disabled]="quizForm.invalid" >Create Quiz</button>
-</form>
+</div>

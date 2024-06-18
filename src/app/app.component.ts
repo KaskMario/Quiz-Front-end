@@ -3,12 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import {CreateQuizComponent} from "./components/create-quiz/create-quiz.component";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
-import {LoadQuizComponent} from "./components/load-quiz/load-quiz.component";
+import {QuizPlayerComponent} from "./components/quiz-player/quiz-player.component";
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CreateQuizComponent, HttpClientModule, FormsModule,LoadQuizComponent],
+  imports: [RouterOutlet, CreateQuizComponent, HttpClientModule, FormsModule, QuizPlayerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 
@@ -12,16 +12,16 @@ export class QuizService {
   constructor(private http: HttpClient) {
   }
 
-  public createQuiz(category: string, numberOfQuestions: number, title: string): Observable<any> {
-    const url = `${this.apiServerUrl}/quiz/create`;
-    const body = { category, numberOfQuestions, title };
-    return this.http.post(url, body);
+  getCategories(): Observable<string[]> {
+    const url = `${this.apiServerUrl}/quiz/categories`;
+    return this.http.get<string[]>(url);
   }
 
-  public getQuizQuestions(id: number | undefined): Observable<any> {
-    return this.http.get<any>(`${this.apiServerUrl}/quiz/get/${id}`);
-  }
 
+  getQuizQuestions(category: string, numberOfQuestions: number): Observable<any> {
+    const url = `${this.apiServerUrl}/quiz/get?category=${category}&numberOfQuestions=${numberOfQuestions}`;
+    return this.http.get<any>(url);
+  }
 
 
 

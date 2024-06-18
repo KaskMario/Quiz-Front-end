@@ -1,0 +1,20 @@
+<div class="container mt-4">
+  <h2>Quiz Player</h2>
+  <div *ngIf="currentQuestion">
+    <h4>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</h4>
+    <p>{{ currentQuestion.questionTitle }}</p>
+    <div *ngFor="let option of [currentQuestion.option1, currentQuestion.option2, currentQuestion.option3, currentQuestion.option4]">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="options" [value]="option" (change)="onOptionSelected(option)" [checked]="selectedOption === option">
+        <label class="form-check-label">
+          {{ option }}
+        </label>
+      </div>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-secondary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
+      <button class="btn btn-secondary" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
+      <button class="btn btn-primary" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
+    </div>
+  </div>
+</div>
