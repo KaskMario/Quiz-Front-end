@@ -24,12 +24,13 @@ export class CreateQuizComponent implements OnInit{
   categories: string[] = [];
   quizForm: FormGroup;
   questions: any[] = [];
-  quizCreated: boolean = false; // Flag to control visibility of QuizPlayerComponent
+  quizCreated: boolean = false;
+  resetQuizPlayer: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private quizService: QuizService) {
     this.quizForm = this.formBuilder.group({
       category: ['', Validators.required],
-      numberOfQuestions: [1, [Validators.required, Validators.min(1)]]
+      numberOfQuestions: ['', [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -52,22 +53,23 @@ export class CreateQuizComponent implements OnInit{
     if (this.quizForm.valid) {
       const category = this.quizForm.value.category;
       const numberOfQuestions = this.quizForm.value.numberOfQuestions;
-      console.log('Submitting:', { category, numberOfQuestions });
+      this.quizCreated = false;
+      this.resetQuizPlayer = false;
       this.fetchQuizQuestions(category, numberOfQuestions);
+      this.quizForm.reset()
+
     }
+
   }
 
   fetchQuizQuestions(category: string, numberOfQuestions: number): void {
-    console.log('Fetching Questions:', { category, numberOfQuestions });
     this.quizService.getQuizQuestions(category, numberOfQuestions).subscribe(
       (questions) => {
         this.questions = questions;
-        console.log('Quiz Questions:', this.questions);
-        this.quizCreated = true; // Set flag to true to show QuizPlayerComponent
+        this.quizCreated = true;
+        this.resetQuizPlayer = true;
       },
-      (error) => {
-        console.error('Failed to fetch quiz questions', error);
-      }
+
     );
   }
 }

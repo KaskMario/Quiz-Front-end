@@ -3,9 +3,9 @@
   <div *ngIf="currentQuestion">
     <h4>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</h4>
     <p>{{ currentQuestion.questionTitle }}</p>
-    <div *ngFor="let option of [currentQuestion.option1, currentQuestion.option2, currentQuestion.option3, currentQuestion.option4]">
+    <div *ngFor="let option of options">
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="options" [value]="option" (change)="onOptionSelected(option)" [checked]="selectedOption === option">
+        <input class="form-check-input" type="radio" name="options" [value]="option" (change)="onOptionSelected(option)" [checked]="selectedOption === option" [disabled]="isOptionSelected">
         <label class="form-check-label">
           {{ option }}
         </label>
@@ -15,6 +15,14 @@
       <button class="btn btn-secondary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
       <button class="btn btn-secondary" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
       <button class="btn btn-primary" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
+    </div>
+    <br>
+    <div *ngIf="selectedOption">
+      <p *ngIf="isAnswerCorrect()">Correct!</p>
+      <p *ngIf="!isAnswerCorrect()">Incorrect. The correct answer is {{ correctAnswer }}.</p>
+    </div>
+    <div *ngIf="showResults">
+      <h5>You answered {{ correctAnswersCount }} out of {{ questions.length }} questions correctly.</h5>
     </div>
   </div>
 </div>
