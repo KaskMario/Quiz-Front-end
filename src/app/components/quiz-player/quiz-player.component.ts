@@ -47,20 +47,20 @@ export class QuizPlayerComponent implements OnInit{
   }
 
   nextQuestion(): void {
-    if (this.currentQuestionIndex < this.questions.length - 1 && !this.isSubmitPressed) {
+    if (this.currentQuestionIndex < this.questions.length - 1 && !this.isSubmitPressed && this.isOptionSelected) {
       this.currentQuestionIndex++;
       this.loadCurrentQuestion();
       this.showResults = false;
     }
   }
 
-  previousQuestion(): void {
+/*  previousQuestion(): void {
     if (this.currentQuestionIndex > 0 && !this.isSubmitPressed) {
       this.currentQuestionIndex--;
       this.loadCurrentQuestion();
       this.showResults = false;
     }
-  }
+  }*/
 
   submitQuiz(): void {
     this.showResults = true;
@@ -71,9 +71,6 @@ export class QuizPlayerComponent implements OnInit{
       (answer) => {
         this.correctAnswer = answer;
       },
-      (error) => {
-        console.error('Failed to fetch right answer', error);
-      }
     );
   }
   isAnswerCorrect(): boolean {

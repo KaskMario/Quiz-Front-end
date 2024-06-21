@@ -1,19 +1,22 @@
-<div class="container mt-4">
+
   <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="category">Category:</label>
+    <h2>Quiz</h2>
+    <div class="form-group m-2 p-2">
+      <label class="form-label" for="category">Category:</label>
       <select id="category" class="form-control" formControlName="category" required>
         <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
       </select>
     </div>
-    <div class="form-group">
-      <label for="numberOfQuestions">Number of Questions:</label>
+    <div class="form-group m-2 p-2">
+      <label class="form-label" for="numberOfQuestions">Number of Questions:</label>
       <input type="number" id="numberOfQuestions" class="form-control" formControlName="numberOfQuestions" required>
     </div>
-    <button type="submit" class="btn btn-primary">Create Quiz</button>
+    <div class="form-group m-2 p-2">
+      <button type="submit" class="btn btn-dark">Create Quiz</button>
+    </div>
   </form>
 
   <div *ngIf="quizCreated">
     <quiz-player [questions]="questions"></quiz-player>
   </div>
-</div>
+

@@ -1,7 +1,14 @@
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!
-  </h1>
-</div>
-<create-quiz></create-quiz>
+<header class="container-fluid bg-black text-white p-3">
+  <h1>{{title}}</h1>
+  <nav>
+    <a class="col btn p-2 m-2 btn-light" routerLink="">Home</a>
+    <a class="col btn p-2 m-2 btn-light" routerLink="/login">Login</a>
+    <a class="col btn p-2 m-2 btn-light" routerLink="/register">Register</a>
+  </nav>
+</header>
+
+<main class="container mt-3">
+  <router-outlet></router-outlet>
+</main>
+
 
