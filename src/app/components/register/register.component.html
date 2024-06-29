@@ -1,15 +1,25 @@
-<form>
+<div>
   <h2>Register</h2>
+<form (ngSubmit)="register()">
   <div class="form-group m-2 p-2">
     <label class="form-label" for="username">Username</label>
-    <input class="form-control" type="text" name="username" id="username" required>
+    <input class="form-control" [(ngModel)]="username" type="text" name="username" id="username" required>
   </div>
   <div class="form-group m-2 p-2">
     <label class="form-label" for="password">Password</label>
-    <input class="form-control" type="password" name="password" id="password" required>
+    <input class="form-control" [(ngModel)]="password" type="password" name="password" id="password" required>
   </div>
   <div class="form-group m-2 p-2">
-    <button class="btn btn-dark">Register</button>
+    <input type="checkbox" id="adminToggle" [(ngModel)]="isAdminRegistration" name="adminToggle">
+    <label for="adminToggle">Register as Admin</label>
+  </div>
+  <div class="form-group m-2 p-2" *ngIf="isAdminRegistration">
+    <label class="form-label" for="adminKey">Admin Key</label>
+    <input class="form-control" type="text" name="adminKey" id="adminKey" [(ngModel)]="adminKey">
+  </div>
+  <div class="form-group m-2 p-2">
+    <button class="btn btn-dark" type="submit">Register</button>
   </div>
 </form>
+</div>
 

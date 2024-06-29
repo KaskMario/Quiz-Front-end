@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h2>Quiz Player</h2>
+    <h2>{{title}}</h2>
   <div *ngIf="currentQuestion">
     <h4>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</h4>
     <p>{{ currentQuestion.questionTitle }}</p>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="mt-2">
-     <!-- <button class="btn btn-secondary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button> -->
+
       <button class="btn btn-dark" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
       <button class="btn btn-dark" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
     </div>

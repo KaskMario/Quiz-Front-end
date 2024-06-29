@@ -1,10 +1,15 @@
 <header class="container-fluid bg-black text-white p-3">
+  <div class="d-flex justify-content-between align-items-center">
   <h1>{{title}}</h1>
   <nav>
     <a class="col btn p-2 m-2 btn-light" routerLink="">Home</a>
     <a class="col btn p-2 m-2 btn-light" routerLink="/login">Login</a>
     <a class="col btn p-2 m-2 btn-light" routerLink="/register">Register</a>
   </nav>
+    <div *ngIf="isLoggedIn" class="text-light">
+      <span>Welcome, {{ loggedInUsername.toUpperCase() }}</span>
+    </div>
+  </div>
 </header>
 
 <main class="container mt-3">

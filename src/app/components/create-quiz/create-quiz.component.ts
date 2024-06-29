@@ -3,6 +3,7 @@ import {QuizService} from "../../service/quizService";
 import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {QuizPlayerComponent} from "../quiz-player/quiz-player.component";
+import {LoginComponent} from "../login/login.component";
 
 
 @Component({
@@ -14,18 +15,19 @@ import {QuizPlayerComponent} from "../quiz-player/quiz-player.component";
     ReactiveFormsModule,
     NgForOf,
     QuizPlayerComponent,
+    LoginComponent,
 
   ],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css'
 })
-export class CreateQuizComponent implements OnInit{
+export class CreateQuizComponent implements OnInit {
 
   categories: string[] = [];
   quizForm: FormGroup;
   questions: any[] = [];
   quizCreated: boolean = false;
-  resetQuizPlayer: boolean = false;
+
 
   constructor(private formBuilder: FormBuilder, private quizService: QuizService) {
     this.quizForm = this.formBuilder.group({
@@ -54,7 +56,6 @@ export class CreateQuizComponent implements OnInit{
       const category = this.quizForm.value.category;
       const numberOfQuestions = this.quizForm.value.numberOfQuestions;
       this.quizCreated = false;
-      this.resetQuizPlayer = false;
       this.fetchQuizQuestions(category, numberOfQuestions);
       this.quizForm.reset()
 
@@ -67,9 +68,9 @@ export class CreateQuizComponent implements OnInit{
       (questions) => {
         this.questions = questions;
         this.quizCreated = true;
-        this.resetQuizPlayer = true;
+       // this.resetQuizPlayer = true;
       },
-
     );
   }
+
 }

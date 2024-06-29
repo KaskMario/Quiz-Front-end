@@ -14,6 +14,7 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class QuizPlayerComponent implements OnInit{
   @Input() questions: any[] = [];
+  title: string = '"Practice makes perfect."';
   currentQuestionIndex: number = 0;
   currentQuestion: any;
   selectedOption: string = '';
@@ -53,14 +54,6 @@ export class QuizPlayerComponent implements OnInit{
       this.showResults = false;
     }
   }
-
-/*  previousQuestion(): void {
-    if (this.currentQuestionIndex > 0 && !this.isSubmitPressed) {
-      this.currentQuestionIndex--;
-      this.loadCurrentQuestion();
-      this.showResults = false;
-    }
-  }*/
 
   submitQuiz(): void {
     this.showResults = true;
