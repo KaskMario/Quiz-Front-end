@@ -1,11 +1,69 @@
 
 <form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
-  <h2>ADMIN</h2>
+  <h2>Questions</h2>
   <div class="form-group m-2 p-2">
-    <label class="form-label" for="title">Title:</label>
+    <button type="button" class="btn btn-primary me-2" (click)="edit()">Edit</button>
+    <button type="button" class="btn btn-primary me-2">Add</button>
+    <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+    <label class="form-label" for="title"></label>
     <select id="title" class="form-control" formControlName="title" required>
-      <option *ngFor="let question of questions">{{question}}</option>
+      <option *ngFor="let question of questions" [value]="question.questionTitle">{{question.questionTitle}}</option>
     </select>
   </div>
-
 </form>
+
+<div *ngIf="selectedQuestion && !isEditVisible &&  !isDeleted " class="m-2 p-2">
+  <h3>Selected Question Details</h3>
+  <p><strong>Title:</strong> {{ selectedQuestion.questionTitle }}</p>
+  <p><strong>Option 1:</strong> {{ selectedQuestion.option1 }}</p>
+  <p><strong>Option 2:</strong> {{ selectedQuestion.option2 }}</p>
+  <p><strong>Option 3:</strong> {{ selectedQuestion.option3 }}</p>
+  <p><strong>Option 4:</strong> {{ selectedQuestion.option4 }}</p>
+  <p><strong>Right Answer:</strong> {{ selectedQuestion.rightAnswer }}</p>
+  <p><strong>Difficulty Level:</strong> {{ selectedQuestion.difficultyLevel }}</p>
+  <p><strong>Category:</strong> {{ selectedQuestion.category }}</p>
+</div>
+
+<div *ngIf="isEditVisible" class="m-2 p-2">
+  <h3>Edit Question</h3>
+  <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+    <div class="form-group">
+      <label for="id">ID:</label>
+      <input type="text" id="id" formControlName="id" class="form-control" readonly>
+    </div>
+    <div class="form-group">
+      <label for="questionTitle">Title:</label>
+      <input type="text" id="questionTitle" formControlName="questionTitle" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="option1">Option 1:</label>
+      <input type="text" id="option1" formControlName="option1" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="option2">Option 2:</label>
+      <input type="text" id="option2" formControlName="option2" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="option3">Option 3:</label>
+      <input type="text" id="option3" formControlName="option3" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="option4">Option 4:</label>
+      <input type="text" id="option4" formControlName="option4" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="rightAnswer">Right Answer:</label>
+      <input type="text" id="rightAnswer" formControlName="rightAnswer" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="difficultyLevel">Difficulty Level:</label>
+      <input type="text" id="difficultyLevel" formControlName="difficultyLevel" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <input type="text" id="category" formControlName="category" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" (click)="onCancelEdit()">Cancel</button>
+  </form>
+</div>
