@@ -1,0 +1,11 @@
+
+<form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
+  <h2>ADMIN</h2>
+  <div class="form-group m-2 p-2">
+    <label class="form-label" for="title">Title:</label>
+    <select id="title" class="form-control" formControlName="title" required>
+      <option *ngFor="let question of questions">{{question}}</option>
+    </select>
+  </div>
+
+</form>
