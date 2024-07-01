@@ -1,33 +1,34 @@
 import {Component, OnInit} from '@angular/core';
-import {AdminService} from "../../service/adminService";
+import {QuestionService} from "../../service/questionService";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-admin',
+  selector: 'app-question',
   standalone: true,
   imports: [
     NgForOf,
     ReactiveFormsModule,
     NgIf
   ],
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  templateUrl: './question.component.html',
+  styleUrl: './question.component.css'
 })
-export class AdminComponent implements OnInit  {
+export class QuestionComponent implements OnInit  {
 
   questions: any[] = [];
-  adminForm: FormGroup;
+  addQuestionForm: FormGroup;
   selectedQuestion: any = null;
-  editForm: FormGroup;
+  editQuestionForm: FormGroup;
   isEditVisible: boolean = false;
   isDeleted: boolean = false;
+  isAddPressed: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private adminService: AdminService) {
-    this.adminForm = this.formBuilder.group({
+  constructor(private formBuilder: FormBuilder, private adminService: QuestionService) {
+    this.addQuestionForm = this.formBuilder.group({
       title: ['', Validators.required]
     });
-    this.editForm = this.formBuilder.group({
+    this.editQuestionForm = this.formBuilder.group({
       id: [{ value: '', disabled: true }],
       questionTitle: ['', Validators.required],
       option1: ['', Validators.required],
@@ -38,7 +39,7 @@ export class AdminComponent implements OnInit  {
       difficultyLevel: ['', Validators.required],
       category: ['', Validators.required]
     });
-    this.adminForm.get('title')?.valueChanges.subscribe(value => {
+    this.addQuestionForm.get('title')?.valueChanges.subscribe(value => {
       this.selectQuestion(value);
     });
   }
@@ -62,32 +63,59 @@ export class AdminComponent implements OnInit  {
   edit(): void {
     if (this.selectedQuestion) {
       this.isEditVisible = true;
-      this.editForm.patchValue(this.selectedQuestion);
+      this.isAddPressed = false;
+      this.editQuestionForm.patchValue(this.selectedQuestion);
     }
   }
 
   saveEdit(): void {
     const updatedQuestion = {
-      ...this.editForm.getRawValue(),
+      ...this.editQuestionForm.getRawValue(),
       id: this.selectedQuestion.id
     };
     this.adminService.updateQuestion(updatedQuestion.id, updatedQuestion).subscribe(
       (response) => {
-        // Update the local questions array with the updated question
         const index = this.questions.findIndex(q => q.id === updatedQuestion.id);
         if (index !== -1) {
           this.questions[index] = updatedQuestion;
         }
         this.isEditVisible = false;
         this.selectedQuestion = updatedQuestion;
+        alert('Question updated successfully');
       },
       (error) => {
-        console.error('Error updating question:', error);
+        alert(`Error updating question: ${error}`);
       }
     );
   }
 
-  onCancelEdit(): void {
+  add() :void{
+    this.isEditVisible = true;
+    this.isAddPressed = true;
+    this.editQuestionForm.reset();
+    this.addQuestionForm.reset();
+    this.selectedQuestion = null;
+  }
+  saveAddedQuestion(): void {
+    const newQuestion = {
+      ...this.editQuestionForm.getRawValue()
+    };
+      delete newQuestion.id;
+
+    this.adminService.addQuestion(newQuestion).subscribe(
+      (response) => {
+        this.questions.push(response);
+        this.isEditVisible = false;
+        alert('Question added successfully');
+      },
+      (error) => {
+        alert(`Error adding question: ${error}`);
+      }
+    );
+
+  }
+
+  cancelEdit(): void {
     this.isEditVisible = false;
   }
 
@@ -104,7 +132,6 @@ export class AdminComponent implements OnInit  {
             this.isDeleted = true;
           },
           error => {
-            console.error('Error deleting question:', error);
             alert(error.message || 'Failed to delete question');
           }
         );

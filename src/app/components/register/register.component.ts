@@ -31,7 +31,7 @@ export class RegisterComponent {
       this.authService.registerAdmin(this.username, this.password, this.adminKey).subscribe({
         next: message => {
           console.log('Admin registration successful:', message);
-          this.router.navigate(['/login']); // Redirect to the login page or any other page
+          this.router.navigate(['/login']);
         },
         error: err => {
           console.error('Registration failed', err);
@@ -42,7 +42,7 @@ export class RegisterComponent {
       this.authService.register(this.username, this.password).subscribe({
         next: message => {
           console.log('Registration successful:', message);
-          this.router.navigate(['/login']); // Redirect to the login page or any other page
+          this.router.navigate(['/login']);
         },
         error: err => {
           console.error('Registration failed', err);

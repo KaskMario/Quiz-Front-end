@@ -3,11 +3,12 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {AuthService} from "./authService";
+import {Question} from "../models/question";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminService {
+export class QuestionService {
   private apiServerUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient, private authService: AuthService) {
@@ -22,6 +23,7 @@ export class AdminService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.get<any[]>(url, { headers }).pipe(
+      catchError(this.handleError)
     );
   }
   deleteQuestion(id: number): Observable<{message:string}> {
@@ -35,6 +37,18 @@ export class AdminService {
       catchError(this.handleError)
     );
   }
+  addQuestion(question: Question): Observable<{message:string}> {
+    const url = `${this.apiServerUrl}/question/add`;
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<any>(url, question, { headers }).pipe(
+      catchError(this.handleError)
+    );
+
+  }
 
   updateQuestion(id: number, updatedQuestion: any) {
     const url = `${this.apiServerUrl}/question/update`;
@@ -44,7 +58,7 @@ export class AdminService {
       'Content-Type': 'application/json'
     });
     return this.http.put<any>(url, updatedQuestion, { headers }).pipe(
-
+      catchError(this.handleError)
     );
   }
   private handleError(error: HttpErrorResponse) {

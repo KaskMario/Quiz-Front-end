@@ -68,7 +68,6 @@ export class CreateQuizComponent implements OnInit {
       (questions) => {
         this.questions = questions;
         this.quizCreated = true;
-       // this.resetQuizPlayer = true;
       },
     );
   }

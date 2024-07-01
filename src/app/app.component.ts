@@ -8,13 +8,13 @@ import {RegisterComponent} from "./components/register/register.component";
 import {LoginComponent} from "./components/login/login.component";
 import {AuthService} from "./service/authService";
 import {NgIf} from "@angular/common";
-import {AdminComponent} from "./components/admin/admin.component";
+import {QuestionComponent} from "./components/question/question.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CreateQuizComponent, AdminComponent, RegisterComponent, LoginComponent, HttpClientModule, FormsModule, QuizPlayerComponent, RouterLink, NgIf],
+  imports: [RouterOutlet , CreateQuizComponent, QuestionComponent, RegisterComponent, LoginComponent, HttpClientModule, FormsModule, QuizPlayerComponent, RouterLink, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
