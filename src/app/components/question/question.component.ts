@@ -14,7 +14,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
   templateUrl: './question.component.html',
   styleUrl: './question.component.css'
 })
-export class QuestionComponent implements OnInit  {
+export class QuestionComponent implements OnInit {
 
   questions: any[] = [];
   addQuestionForm: FormGroup;
@@ -29,7 +29,7 @@ export class QuestionComponent implements OnInit  {
       title: ['', Validators.required]
     });
     this.editQuestionForm = this.formBuilder.group({
-      id: [{ value: '', disabled: true }],
+      id: [{value: '', disabled: true}],
       questionTitle: ['', Validators.required],
       option1: ['', Validators.required],
       option2: ['', Validators.required],
@@ -43,8 +43,9 @@ export class QuestionComponent implements OnInit  {
       this.selectQuestion(value);
     });
   }
+
   ngOnInit(): void {
-   this.getQuestions();
+    this.getQuestions();
   }
 
   getQuestions(): void {
@@ -89,18 +90,19 @@ export class QuestionComponent implements OnInit  {
     );
   }
 
-  add() :void{
+  add(): void {
     this.isEditVisible = true;
     this.isAddPressed = true;
     this.editQuestionForm.reset();
     this.addQuestionForm.reset();
     this.selectedQuestion = null;
   }
+
   saveAddedQuestion(): void {
     const newQuestion = {
       ...this.editQuestionForm.getRawValue()
     };
-      delete newQuestion.id;
+    delete newQuestion.id;
 
     this.adminService.addQuestion(newQuestion).subscribe(
       (response) => {
@@ -119,7 +121,8 @@ export class QuestionComponent implements OnInit  {
     this.isEditVisible = false;
   }
 
-  onSubmit(): void {}
+  onSubmit(): void {
+  }
 
   delete() {
     if (this.selectedQuestion) {
@@ -132,7 +135,11 @@ export class QuestionComponent implements OnInit  {
             this.isDeleted = true;
           },
           error => {
-            alert(error.message || 'Failed to delete question');
+            if (error.status === 404) {
+              alert('Question not found');
+            } else {
+              alert(error.message || 'Failed to delete question');
+            }
           }
         );
       }
@@ -140,5 +147,4 @@ export class QuestionComponent implements OnInit  {
       alert('No question selected');
     }
   }
-
 }

@@ -29,12 +29,12 @@ export class AuthService {
     );
 
   }
-  isLoggedIn(): Observable<boolean> {
+ /* isLoggedIn(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
   getLoggedInUsername(): string {
     return this.loggedInUsername;
-  }
+  }*/
 
   register(username: string, password: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
@@ -62,14 +62,20 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  setUsername(username: string): void {
+    localStorage.setItem('username', username);
+  }
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }
 
   private handleError(error: any): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
+
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side error
+
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(errorMessage);

@@ -26,19 +26,27 @@ export class AppComponent {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn().subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      if (loggedIn) {
-        this.loggedInUsername = this.authService.getLoggedInUsername();
-      } else {
-        this.loggedInUsername = '';
-      }
-    });
+    this.checkLoggedInStatus();
+  }
+  checkLoggedInStatus(): void {
+    const token = this.authService.getToken();
+    const username = this.authService.getUsername();
+    if (token && username) {
+      this.isLoggedIn = true;
+      this.loggedInUsername = username;
+    }
   }
 
   onLoggedIn(username: string): void {
     this.isLoggedIn = true;
     this.loggedInUsername = username;
+  }
+  onActivate(event: any): void {
+    if (event.loggedIn) {
+      event.loggedIn.subscribe((username: string) => {
+        this.onLoggedIn(username);
+      });
+    }
   }
 
 

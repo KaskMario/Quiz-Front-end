@@ -26,14 +26,14 @@ export class QuestionService {
       catchError(this.handleError)
     );
   }
-  deleteQuestion(id: number): Observable<{message:string}> {
+  deleteQuestion(id: number): Observable<any> {
     const url = `${this.apiServerUrl}/question/delete/${id}`;
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.delete<{ message: string }>(url, { headers }).pipe(
+    return this.http.delete(url, { headers, responseType: 'text' }).pipe(
       catchError(this.handleError)
     );
   }
@@ -64,10 +64,8 @@ export class QuestionService {
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred.
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // The backend returned an unsuccessful response code.
       if (error.status === 403) {
         errorMessage = 'Access forbidden: You do not have the necessary permissions to access this resource.';
       } else {

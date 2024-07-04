@@ -26,6 +26,7 @@ export class LoginComponent {
         localStorage.setItem('token', token);
         this.loggedIn.emit(this.username);
         this.router.navigate(['/']);
+        alert("Login successful");
       },
       error: err => {
         console.error('Login failed', err);

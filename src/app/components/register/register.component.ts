@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from "../../service/authService";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
@@ -20,6 +20,7 @@ export class RegisterComponent {
   password: string = '';
   adminKey: string = '';
   isAdminRegistration: boolean = false;
+  @Output() loggedIn = new EventEmitter<string>();
 
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -31,7 +32,9 @@ export class RegisterComponent {
       this.authService.registerAdmin(this.username, this.password, this.adminKey).subscribe({
         next: message => {
           console.log('Admin registration successful:', message);
-          this.router.navigate(['/login']);
+          this.authService.setUsername(this.username);
+          this.loggedIn.emit(this.username);
+          this.router.navigate(['']);
         },
         error: err => {
           console.error('Registration failed', err);
@@ -42,7 +45,10 @@ export class RegisterComponent {
       this.authService.register(this.username, this.password).subscribe({
         next: message => {
           console.log('Registration successful:', message);
-          this.router.navigate(['/login']);
+          this.authService.setUsername(this.username);
+          this.loggedIn.emit(this.username);
+          this.router.navigate(['']);
+          alert('Registration successful!');
         },
         error: err => {
           console.error('Registration failed', err);

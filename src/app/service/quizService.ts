@@ -29,7 +29,7 @@ export class QuizService {
   getQuizQuestions(category: string, numberOfQuestions: number): Observable<any> {
     const headers = this.getAuthHeaders();
     const url = `${this.apiServerUrl}/quiz/get?category=${category}&numberOfQuestions=${numberOfQuestions}`;
-    console.log(`Requesting quiz questions from URL: ${url} with headers:`, headers);  // Logging the request details
+  //  console.log(`Requesting quiz questions from URL: ${url} with headers:`, headers);  // Logging the request details
     return this.http.get<any>(url, { headers });
   }
 
@@ -37,7 +37,7 @@ export class QuizService {
   getRightAnswer(questionId: number): Observable<string> {
     const headers = this.getAuthHeaders();
     const url = `${this.apiServerUrl}/quiz/answer/${questionId}`;
-    console.log(`Requesting right answer from URL: ${url} with headers:`, headers);  // Logging the request details
+   // console.log(`Requesting right answer from URL: ${url} with headers:`, headers);  // Logging the request details
     return this.http.get<{ rightAnswer: string }>(url, { headers }).pipe(
       map(response => response.rightAnswer)
     );
