@@ -13,8 +13,8 @@
     </div>
     <div class="mt-2">
 
-      <button class="btn btn-dark" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
-      <button class="btn btn-dark" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
+      <button class="btn btn-dark m-2" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
+      <button class="btn btn-dark m-2" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
     </div>
     <br>
     <div *ngIf="selectedOption">
@@ -23,6 +23,8 @@
     </div>
     <div *ngIf="showResults">
       <h5>You answered {{ correctAnswersCount }} out of {{ questions.length }} questions correctly.</h5>
+      <button class="btn btn-dark m-2" (click)="triggerStartNewQuiz()">New Quiz</button>
+      <button class="btn btn-dark m-2" (click)="logOut()">Log out</button>
     </div>
   </div>
 </div>

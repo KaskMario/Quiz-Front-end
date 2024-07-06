@@ -9,7 +9,7 @@ import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxj
 export class AuthService {
   private apiServerUrl = environment.apiBaseUrl;
   private loggedIn = new BehaviorSubject<boolean>(false);
-  private loggedInUsername: string = '';
+  private loggedInUsername = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient) {
   }
@@ -21,7 +21,7 @@ export class AuthService {
       map(response => response as string),
       tap(token => {
         localStorage.setItem('token', token);
-        this.loggedInUsername = username;
+        this.loggedInUsername.next(username);
         this.loggedIn.next(true);
       }),
       catchError(this.handleError)
@@ -29,13 +29,12 @@ export class AuthService {
     );
 
   }
- /* isLoggedIn(): Observable<boolean> {
+  isLoggedIn(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
-  getLoggedInUsername(): string {
-    return this.loggedInUsername;
-  }*/
-
+  getLoggedInUsername(): Observable<string> {
+    return this.loggedInUsername.asObservable();
+  }
   register(username: string, password: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
     return this.http.post(url, { username, password }, { responseType: 'text' }).pipe(
@@ -56,18 +55,18 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
-    this.loggedInUsername = '';
+    this.loggedInUsername.next('');
   }
 
   getToken(): string | null {
     return localStorage.getItem('token');
   }
-  setUsername(username: string): void {
+ /* setUsername(username: string): void {
     localStorage.setItem('username', username);
   }
   getUsername(): string | null {
     return localStorage.getItem('username');
-  }
+  }*/
 
   private handleError(error: any): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

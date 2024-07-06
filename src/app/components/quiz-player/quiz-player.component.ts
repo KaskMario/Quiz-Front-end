@@ -1,6 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {QuizService} from "../../service/quizService";
 import {NgForOf, NgIf} from "@angular/common";
+import {CreateQuizComponent} from "../create-quiz/create-quiz.component";
+import {AuthService} from "../../service/authService";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'quiz-player',
@@ -14,6 +17,8 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class QuizPlayerComponent implements OnInit{
   @Input() questions: any[] = [];
+  @Output() newQuiz = new EventEmitter<void>();
+
   title: string = '"Practice makes perfect."';
   currentQuestionIndex: number = 0;
   currentQuestion: any;
@@ -27,7 +32,9 @@ export class QuizPlayerComponent implements OnInit{
 
 
 
-  constructor(private quizService: QuizService) {}
+  constructor(private quizService: QuizService,
+              private authService: AuthService,
+              private router: Router ) {}
 
   ngOnInit(): void {
     if (this.questions.length > 0) {
@@ -58,6 +65,7 @@ export class QuizPlayerComponent implements OnInit{
   submitQuiz(): void {
     this.showResults = true;
     this.isSubmitPressed = true;
+
   }
   fetchRightAnswer(questionId: number): void {
     this.quizService.getRightAnswer(questionId).subscribe(
@@ -76,7 +84,14 @@ export class QuizPlayerComponent implements OnInit{
     this.fetchRightAnswer(this.currentQuestion.id);
     this.selectedOption = '';
   }
+  triggerStartNewQuiz(): void {
+    this.newQuiz.emit();
+  }
 
-
+  logOut() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+    alert('Log out successful!');
+  }
 }
 

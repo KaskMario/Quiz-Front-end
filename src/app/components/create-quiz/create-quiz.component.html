@@ -1,4 +1,5 @@
 
+<div *ngIf="!quizCreated">
   <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
     <h2>Quiz</h2>
     <div class="form-group m-2 p-2">
@@ -8,14 +9,22 @@
       </select>
     </div>
     <div class="form-group m-2 p-2">
+      <label class="form-label" for="difficulty">Difficulty level:</label>
+      <select id="difficulty" class="form-control" formControlName="difficulty" required>
+        <option *ngFor="let difficulty of difficultyLevels" [value]="difficulty">{{ difficulty }}</option>
+      </select>
+    </div>
+    <div class="form-group m-2 p-2">
       <label class="form-label" for="numberOfQuestions">Number of Questions:</label>
-      <input type="number" id="numberOfQuestions" class="form-control" formControlName="numberOfQuestions" required>
+      <select type="number" id="numberOfQuestions" class="form-control" formControlName="numberOfQuestions" required>
+        <option *ngFor="let number of numberOfQuestions" [value]="number">{{ number}}</option>
+      </select>
     </div>
     <div class="form-group m-2 p-2">
       <button type="submit" class="btn btn-dark">Create Quiz</button>
     </div>
   </form>
+</div>
   <div *ngIf="quizCreated">
-    <quiz-player [questions]="questions"></quiz-player>
+    <quiz-player [questions]="questions" (newQuiz)="handleNewQuizEvent()"></quiz-player>
   </div>
-
