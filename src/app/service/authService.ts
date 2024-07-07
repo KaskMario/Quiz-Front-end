@@ -35,23 +35,25 @@ export class AuthService {
   getLoggedInUsername(): Observable<string> {
     return this.loggedInUsername.asObservable();
   }
-  register(username: string, password: string): Observable<string> {
+  
+  register(username: string, password: string, first_name: string, last_name : string, email : string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
-    return this.http.post(url, { username, password }, { responseType: 'text' }).pipe(
+    const user = { username, password, first_name, last_name, email };
+
+    return this.http.post(url, user, { responseType: 'text' }).pipe(
       map(response => response as string),
       catchError(this.handleError)
     );
   }
 
-  registerAdmin(username: string, password: string, adminKey: string): Observable<string> {
+  registerAdmin(username: string, password: string, first_name: string, last_name : string, email : string, adminKey: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register-admin`;
     const params = new HttpParams().set('adminKey', adminKey);
-    return this.http.post(url, { username, password }, { params, responseType: 'text' }).pipe(
+    return this.http.post(url, { username, password, first_name, last_name, email }, { params, responseType: 'text' }).pipe(
       map(response => response as string),
       catchError(this.handleError)
     );
   }
-
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
