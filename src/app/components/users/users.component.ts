@@ -144,8 +144,8 @@ export class UsersComponent implements OnInit{
   }
   
   deleteUser() : void{
+    if (confirm('Are you sure you want to delete this user?')){
     const userId = this.selectedUser.id;
-    console.log(userId);
     this.usersService.deleteUser(userId).subscribe(
       () => { this.users = this.users.filter(user => user.id !== userId);
         this.isUsersNotEmpty = this.users.length > 0;},
@@ -156,7 +156,7 @@ export class UsersComponent implements OnInit{
     this.selectedUserId = null;
     this.isEditVisible = false;
     this.isAllVisible = true;
-
+  }
   }
 
   
