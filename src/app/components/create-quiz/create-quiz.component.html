@@ -26,5 +26,5 @@
   </form>
 </div>
   <div *ngIf="quizCreated">
-    <quiz-player [questions]="questions" (newQuiz)="handleNewQuizEvent()"></quiz-player>
+    <quiz-player [questions]="questions" [formValues]="quizForm.value" (newQuiz)="handleNewQuizEvent()"></quiz-player>
   </div>

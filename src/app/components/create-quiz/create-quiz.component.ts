@@ -29,6 +29,8 @@ export class CreateQuizComponent implements OnInit {
   quizCreated: boolean = false;
   numberOfQuestions = [10,20];
   difficultyLevels: string[] = [];
+  outputCategory : String = "";
+  outputDifficulty : String = "";
 
 
   constructor(private formBuilder: FormBuilder, private quizService: QuizService) {
@@ -64,7 +66,8 @@ export class CreateQuizComponent implements OnInit {
 
       this.quizCreated = false;
       this.fetchQuizQuestions(category,difficulty,numberOfQuestions);
-
+      this.outputCategory = this.quizForm.value.category; 
+      this.outputDifficulty = this.quizForm.value.difficulty;   
     }
 
   }

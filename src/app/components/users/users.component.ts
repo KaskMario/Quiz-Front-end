@@ -4,11 +4,12 @@ import { UsersService } from '../../service/users.service';
 import { User } from '../../models/user';
 import { CommonModule, NgFor } from '@angular/common';
 import { Role } from '../../models/role';
+import { StatsComponent } from '../stats/stats.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [NgFor, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [NgFor, CommonModule, FormsModule, ReactiveFormsModule, StatsComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -22,8 +23,10 @@ export class UsersComponent implements OnInit{
   selectedRole: any = null;
   isEditVisible : boolean = false;
   isAllVisible : boolean = true;
+  showStats : boolean = false;
   roles: Role[] = [];
   isUsersNotEmpty : boolean = true;
+  selectedUsername : String = "";
  
   
   selectedUserId: number | null = null;
@@ -173,9 +176,20 @@ export class UsersComponent implements OnInit{
   this.deleteUser();
  }
 
+showStatistics(){
 
+  this.selectedUser = this.users.find(u => u.id === this.selectedUserId);
+ this.selectedUsername = this.selectedUser.username;
+  this.showStats=true;
+  this.isEditVisible = false;
+  this.isAllVisible = false;
+}
 
-
+onCloseStats(){
+  this.showStats=false;
+  this.isEditVisible = false;
+  this.isAllVisible = true;
+}
 
 
 

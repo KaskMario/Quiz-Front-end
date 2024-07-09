@@ -15,7 +15,7 @@
                <div class="btn-group-sm" *ngIf="showButtons(user.id)">
                 <button type="button" class="btn btn-primary me-2" (click)="edit(user.id); $event.stopPropagation()">Edit</button>
                 <button type="button" class="btn btn-danger me-2"(click)="deleteSelected(user.id); $event.stopPropagation()">Delete</button>
-                <button type="button" class="btn btn-primary me-2">Statistics</button>
+                <button type="button" class="btn btn-primary me-2" (click)="showStatistics(); $event.stopPropagation()">Statistics</button>
              
                </div>
             </div>
@@ -60,5 +60,13 @@
              
           
             </div>
+         </div>
+         </form>
+         </div>
+        
+
+
+         <div *ngIf="showStats">
+          <app-stats [selectedUserId]="selectedUserId" [selectedUsername]="selectedUsername" (closeStats)="onCloseStats()"></app-stats>
          </div>
     

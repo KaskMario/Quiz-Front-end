@@ -4,6 +4,9 @@ import {NgForOf, NgIf} from "@angular/common";
 import {CreateQuizComponent} from "../create-quiz/create-quiz.component";
 import {AuthService} from "../../service/authService";
 import {Router} from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StatsService } from '../../service/stats.service';
+import { QuizResult } from '../../models/quizResult';
 
 @Component({
   selector: 'quiz-player',
@@ -17,6 +20,7 @@ import {Router} from "@angular/router";
 })
 export class QuizPlayerComponent implements OnInit{
   @Input() questions: any[] = [];
+  @Input() formValues: any;
   @Output() newQuiz = new EventEmitter<void>();
 
   title: string = '"Practice makes perfect."';
@@ -29,11 +33,15 @@ export class QuizPlayerComponent implements OnInit{
   correctAnswersCount: number = 0;
   showResults: boolean = false;
   isSubmitPressed: boolean = false;
+  isResultSumbmitted : boolean = false;
+  loggedInUsername : String = "";
+ 
 
 
 
   constructor(private quizService: QuizService,
               private authService: AuthService,
+              private statsService : StatsService,
               private router: Router ) {}
 
   ngOnInit(): void {
@@ -42,6 +50,7 @@ export class QuizPlayerComponent implements OnInit{
     }
     this.correctAnswersCount=0;
     this.showResults = false;
+    this.isResultSumbmitted = false;
   }
 
   onOptionSelected(option: string): void {
@@ -65,9 +74,12 @@ export class QuizPlayerComponent implements OnInit{
   submitQuiz(): void {
     this.showResults = true;
     this.isSubmitPressed = true;
-
-  }
-  fetchRightAnswer(questionId: number): void {
+    if(!this.isResultSumbmitted) {
+      this.submitResults();
+       this.isResultSumbmitted = true;}
+}
+  
+fetchRightAnswer(questionId: number): void {
     this.quizService.getRightAnswer(questionId).subscribe(
       (answer) => {
         this.correctAnswer = answer;
@@ -93,5 +105,32 @@ export class QuizPlayerComponent implements OnInit{
     this.router.navigate(['/login']);
     alert('Log out successful!');
   }
+
+submitResults(){
+  const newResult : QuizResult = {category : this.formValues.category, difficulty : this.formValues.difficulty, 
+    length : this.questions.length, correctAnswers : this.correctAnswersCount}
+  this.authService.getLoggedInUsername().subscribe(username => {this.loggedInUsername = username;});
+  this.statsService.logResults(newResult, this.loggedInUsername).subscribe(
+    (response) => {
+      console.log('Results logged');
+    },
+    (error) => {
+      alert(`Error logging results: ${error}`);
+    }
+  );
+  
+  
+  
+  console.log(newResult, this.loggedInUsername);
+  
+
+}
+
+
+
+
+
+
+
 }
 

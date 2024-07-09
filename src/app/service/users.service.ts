@@ -50,7 +50,7 @@ export class UsersService {
         errorMessage = `Error: ${error.error.message}`;
       } else {
         if (error.status === 403) {
-          errorMessage = 'Access forbidden: You do not have the necessary permissions to access this resource.';
+          errorMessage = 'Username already in use.';
         } else {
           errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
         }
