@@ -1,5 +1,4 @@
-<head></head>
-<body>
+
 
     <div class="container mt-0">
     <div class="card">
@@ -40,13 +39,27 @@
         
         
       </div>
+
+      <div>
+        <h6 style="margin-left: 15px;">Results by preferred categories:</h6>
+        <div *ngFor="let result of resultsByCategory" class="card mb-3 col-md col-xl-" style="margin-left: 15px; margin-right: 15px;">
+            <div class="card-body">
+           <p><span style = "font-size: 24px;">{{result.category}}</span> <span style="float: right;">score: <span style="font-size: 24px;">{{result.score}} %</span></span>
+            <p>Number of quizzes: {{result.quizzesTotal}}, 
+            with total of {{result.questionsTotal}} questions.</p> 
+    
+        </div>
+        </div> 
+    </div>
+
       <div class="card-footer text-muted">
         Last time played: {{stats.lastTimePlayed}}
       </div>
 </div>
 </div>
 
+
+
 <div style="margin-top: 25px; margin-left: 12px;">
 <button class="btn btn-secondary" (click) ="onCloseStats()">Close</button>
 </div>
-</body>

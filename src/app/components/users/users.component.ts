@@ -6,6 +6,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Role } from '../../models/role';
 import { StatsComponent } from '../stats/stats.component';
 
+
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -27,6 +28,8 @@ export class UsersComponent implements OnInit{
   roles: Role[] = [];
   isUsersNotEmpty : boolean = true;
   selectedUsername : String = "";
+  searchText : String = "";
+  
  
   
   selectedUserId: number | null = null;
@@ -86,12 +89,14 @@ export class UsersComponent implements OnInit{
   handleClick(userId: number) {
    this.selectedUserId = userId;
    this.isEditVisible = false;
+   
   
   }
 
  
   showButtons(userId: number): boolean {
     return this.selectedUserId === userId;
+    
   }
 
     edit(userId: number) {
@@ -189,6 +194,19 @@ onCloseStats(){
   this.showStats=false;
   this.isEditVisible = false;
   this.isAllVisible = true;
+}
+
+get filteredUsers() {
+  if (!this.searchText) {
+    return this.users;}
+  return this.users.filter(user => 
+    user.username.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    user.first_name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    user.last_name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    ((user.first_name.toLowerCase()) + " " + (user.last_name.toLowerCase())).includes(this.searchText.toLowerCase())
+
+
+);
 }
 
 

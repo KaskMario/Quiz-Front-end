@@ -5,6 +5,7 @@ import { AuthService } from './authService';
 import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError, Observable } from 'rxjs';
 import { Stats } from '../models/statistics';
+import { ResultsByCategory } from '../models/resultsByCategory';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,13 @@ private handleError(error: HttpErrorResponse) {
   console.error(errorMessage);
   return throwError(errorMessage);
 }
+
+public getResultsCategories(userId : number): Observable<ResultsByCategory[]>{
+  const headers = this.getAuthHeaders();
+  return this.http.get<ResultsByCategory []>(`${this.apiServerUrl}/stats/bycategory/${userId}`, { headers});}
+
+
+
 
   }
 

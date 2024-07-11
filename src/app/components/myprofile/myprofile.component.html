@@ -1,0 +1,28 @@
+
+<div class ="container mt-0">
+    <div class = "card" *ngIf="user">
+        <div class ="card-header">My profile</div>
+        <div class ="card-body">
+            <div class="container mt-4">
+                <div class="row">
+            <div class="col-md-6">
+                <div class="col text-center">
+                <h1>{{this.user.username}}</h1>
+                <p>Role : {{getRoleName(this.user.role.role)}}</p>
+            </div>
+            </div>
+            <div class="col-md-6">
+                <p><span class="fw-bold">First name :</span> {{this.user.first_name}}</p>
+                <p><span class="fw-bold">Last name: </span>{{this.user.last_name}}</p>
+                <p><span class="fw-bold">Email :</span> {{this.user.email}}</p>              
+          
+       
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    </div>
+</div>
+<div *ngIf="userIdNotNull"><app-stats [selectedUserId]="selectedUserId" [selectedUsername]="selectedUsername" (closeStats)="onCloseStats()"></app-stats></div>

@@ -24,7 +24,8 @@ export class UsersService {
 
   public getUsers(): Observable<User[]>{
     const headers = this.getAuthHeaders();
-    return this.http.get<User []>(`${this.apiServerUrl}/users/all`, { headers});}
+    return this.http.get<User []>(`${this.apiServerUrl}/users/all`, { headers});
+  }
 
     public getRoles(): Observable<Role[]>{
       const headers = this.getAuthHeaders();
@@ -64,6 +65,12 @@ deleteUser(userId : number) : Observable<void> {
   const params = new HttpParams().set('userId', userId.toString());
     return this.http.delete<void>(`${this.apiServerUrl}/users/delete`, { headers, params });
 }
+
+getUserByUsername(username : string) : Observable<User> {
+  const headers = this.getAuthHeaders();
+  const params = new HttpParams().set('username', username);
+    return this.http.get<User>(`${this.apiServerUrl}/users/user`, { headers, params});
+  }
 
 
   }
