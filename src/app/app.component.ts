@@ -8,12 +8,13 @@ import {RegisterComponent} from "./components/register/register.component";
 import {LoginComponent} from "./components/login/login.component";
 import {AuthService} from "./service/authService";
 import {NgIf} from "@angular/common";
+import {QuestionComponent} from "./components/question/question.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CreateQuizComponent, RegisterComponent, LoginComponent, HttpClientModule, FormsModule, QuizPlayerComponent, RouterLink, NgIf],
+  imports: [RouterOutlet , CreateQuizComponent, QuestionComponent, RegisterComponent, LoginComponent, HttpClientModule, FormsModule, QuizPlayerComponent, RouterLink, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -25,19 +26,8 @@ export class AppComponent {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn().subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-      if (loggedIn) {
-        this.loggedInUsername = this.authService.getLoggedInUsername();
-      } else {
-        this.loggedInUsername = '';
-      }
-    });
-  }
-
-  onLoggedIn(username: string): void {
-    this.isLoggedIn = true;
-    this.loggedInUsername = username;
+    this.authService.isLoggedIn().subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+    this.authService.getLoggedInUsername().subscribe(username => this.loggedInUsername = username);
   }
 
 

@@ -9,7 +9,7 @@ import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxj
 export class AuthService {
   private apiServerUrl = environment.apiBaseUrl;
   private loggedIn = new BehaviorSubject<boolean>(false);
-  private loggedInUsername: string = '';
+  private loggedInUsername = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient) {
   }
@@ -21,7 +21,7 @@ export class AuthService {
       map(response => response as string),
       tap(token => {
         localStorage.setItem('token', token);
-        this.loggedInUsername = username;
+        this.loggedInUsername.next(username);
         this.loggedIn.next(true);
       }),
       catchError(this.handleError)
@@ -32,44 +32,51 @@ export class AuthService {
   isLoggedIn(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
-  getLoggedInUsername(): string {
-    return this.loggedInUsername;
+  getLoggedInUsername(): Observable<string> {
+    return this.loggedInUsername.asObservable();
   }
-
-  register(username: string, password: string): Observable<string> {
+  
+  register(username: string, password: string, first_name: string, last_name : string, email : string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
-    return this.http.post(url, { username, password }, { responseType: 'text' }).pipe(
+    const user = { username, password, first_name, last_name, email };
+
+    return this.http.post(url, user, { responseType: 'text' }).pipe(
       map(response => response as string),
       catchError(this.handleError)
     );
   }
 
-  registerAdmin(username: string, password: string, adminKey: string): Observable<string> {
+  registerAdmin(username: string, password: string, first_name: string, last_name : string, email : string, adminKey: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register-admin`;
     const params = new HttpParams().set('adminKey', adminKey);
-    return this.http.post(url, { username, password }, { params, responseType: 'text' }).pipe(
+    return this.http.post(url, { username, password, first_name, last_name, email }, { params, responseType: 'text' }).pipe(
       map(response => response as string),
       catchError(this.handleError)
     );
   }
-
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
-    this.loggedInUsername = '';
+    this.loggedInUsername.next('');
   }
 
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+ /* setUsername(username: string): void {
+    localStorage.setItem('username', username);
+  }
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }*/
 
   private handleError(error: any): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
+
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side error
+
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(errorMessage);

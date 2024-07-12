@@ -21,26 +21,30 @@ export class QuizService {
   }
 
   getCategories(): Observable<string[]> {
+    const headers = this.getAuthHeaders();
     const url = `${this.apiServerUrl}/quiz/categories`;
-    return this.http.get<string[]>(url);
+    return this.http.get<string[]>(url, {headers});
   }
 
 
-  getQuizQuestions(category: string, numberOfQuestions: number): Observable<any> {
+  getQuizQuestions(category: string,difficulty:string, numberOfQuestions: number): Observable<any> {
     const headers = this.getAuthHeaders();
-    const url = `${this.apiServerUrl}/quiz/get?category=${category}&numberOfQuestions=${numberOfQuestions}`;
-    console.log(`Requesting quiz questions from URL: ${url} with headers:`, headers);  // Logging the request details
-    return this.http.get<any>(url, { headers });
+    const url = `${this.apiServerUrl}/quiz/get?category=${category}&difficulty=${difficulty}&numberOfQuestions=${numberOfQuestions}`;
+    return this.http.get<any>(url, {headers});
   }
 
 
   getRightAnswer(questionId: number): Observable<string> {
     const headers = this.getAuthHeaders();
     const url = `${this.apiServerUrl}/quiz/answer/${questionId}`;
-    console.log(`Requesting right answer from URL: ${url} with headers:`, headers);  // Logging the request details
-    return this.http.get<{ rightAnswer: string }>(url, { headers }).pipe(
+    return this.http.get<{ rightAnswer: string }>(url, {headers}).pipe(
       map(response => response.rightAnswer)
     );
   }
 
+  getDifficulty(): Observable<string[]> {
+    const headers = this.getAuthHeaders();
+    const url = `${this.apiServerUrl}/quiz/difficulty-levels`;
+    return this.http.get<string[]>(url,{headers});
+  }
 }

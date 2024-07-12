@@ -3,6 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { StatsComponent } from './components/stats/stats.component';
 
 @NgModule({
 
@@ -11,8 +12,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
+    StatsComponent
   ],
   providers: [],
 })
