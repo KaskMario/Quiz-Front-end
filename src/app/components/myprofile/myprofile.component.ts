@@ -7,11 +7,12 @@ import { User } from '../../models/user';
 import { NgIf } from '@angular/common';
 import { StatsComponent } from '../stats/stats.component';
 import { Router } from '@angular/router';
+import {FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-myprofile',
   standalone: true,
-  imports: [NgIf, StatsComponent],
+  imports: [NgIf, StatsComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './myprofile.component.html',
   styleUrl: './myprofile.component.css'
 })
@@ -23,6 +24,9 @@ export class MyprofileComponent implements OnInit{
   selectedUsername : string = "";
   selectedUserId : number = 0;
   userIdNotNull : boolean = false;
+  profileVisible : boolean = true;
+  isEditVisible : boolean = false;
+  editUserForm: FormGroup;
 
   
   
@@ -30,7 +34,16 @@ export class MyprofileComponent implements OnInit{
   constructor(private statsService: StatsService, 
               private authService: AuthService, 
               private usersService : UsersService,
-              private router: Router) {}
+              private router: Router,
+              private formBuilder: FormBuilder) {
+
+this.editUserForm = this.formBuilder.group({
+username: ['', Validators.required],
+first_name: ['', Validators.required],
+last_name: ['', Validators.required],
+email: ['', Validators.required]                
+                });
+              }
 
   ngOnInit(): void {
      this.getUsername();
@@ -80,7 +93,46 @@ onCloseStats (){
   this.router.navigate(['']);
 }
 
+edit(){
+  this.editUserForm.patchValue({
+    username: this.user.username,
+    first_name: this.user.first_name,
+    last_name: this.user.last_name,
+    email: this.user.email,});
 
+  this.profileVisible = false;
+  this.isEditVisible = true;
+}
+
+save(): void {
+    const formValues = this.editUserForm.getRawValue();
+    const updatedUser = {
+      ...formValues,
+      password : this.user.password,
+      id: this.user.id,
+      role : this.user.role
+      };
+  console.log(updatedUser.id)
+    this.usersService.updateUser(this.user.id, updatedUser).subscribe(
+      (response) => {
+        console.log('User updated successfully:', response);
+        this.isEditVisible = false;
+        this.profileVisible = true;
+        this.ngOnInit();
+
+      },
+      (error) => {
+        console.error('Error updating user:', error);
+      }
+    );
+  }
+      
+     
+
+discard(){
+  this.profileVisible = true;
+  this.isEditVisible = false;
+}
 
 
 
