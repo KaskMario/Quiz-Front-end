@@ -10,17 +10,19 @@ import { StatsComponent } from './components/stats/stats.component';
 import { MyprofileComponent } from './components/myprofile/myprofile.component';
 import { SavequizComponent } from './components/savequiz/savequiz.component';
 import { QuizReplayComponent } from './components/quiz-replay/quiz-replay.component';
+import { authGuard } from './auth.guard';
 
 
 export const routes: Routes = [
-  { path: '', component: CreateQuizComponent },
+  { path: '', component: CreateQuizComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'questions', component: QuestionComponent },
-  { path: 'users', component: UsersComponent },
-  { path: 'profile', component: MyprofileComponent },
-  { path: 'replay', component: QuizReplayComponent },
-
+  { path: 'questions', component: QuestionComponent, canActivate: [authGuard] },
+  { path: 'users', component: UsersComponent, canActivate: [authGuard]},
+  { path: 'profile', component: MyprofileComponent, canActivate: [authGuard] },
+  { path: 'save', component: SavequizComponent,canActivate: [authGuard] },
+  { path: 'replay', component: QuizReplayComponent, canActivate: [authGuard] },
+  
   ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
