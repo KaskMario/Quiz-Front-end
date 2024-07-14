@@ -26,7 +26,8 @@ export class QuestionComponent implements OnInit {
   isAddPressed: boolean = false;
   questionSelected : boolean = false;
   selectedCategory : string = "";
-  
+  unapprovedQuestions: any[] = [];
+
 
   constructor(private formBuilder: FormBuilder, private adminService: QuestionService) {
     this.addQuestionForm = this.formBuilder.group({
@@ -51,13 +52,13 @@ export class QuestionComponent implements OnInit {
     this.addQuestionForm.get('category')?.valueChanges.subscribe(value => {
       this.selectedCategory = value;
           });
-    
+
   }
 
   ngOnInit(): void {
     this.getQuestions();
-    
-    
+
+
   }
 
   getQuestions(): void {
@@ -65,6 +66,13 @@ export class QuestionComponent implements OnInit {
       (questions) => {
         this.questions = questions;
 
+      })
+  }
+
+  getUnapprovedQuestions(): void {
+    this.adminService.getUnapprovedQuestions().subscribe(
+      (questions) => {
+        this.unapprovedQuestions = questions;
       })
   }
 
