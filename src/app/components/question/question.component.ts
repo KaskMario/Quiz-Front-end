@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {QuestionService} from "../../service/questionService";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { Question } from '../../models/question';
 
 @Component({
   selector: 'app-question',
@@ -23,10 +24,14 @@ export class QuestionComponent implements OnInit {
   isEditVisible: boolean = false;
   isDeleted: boolean = false;
   isAddPressed: boolean = false;
+  questionSelected : boolean = false;
+  selectedCategory : string = "";
+  
 
   constructor(private formBuilder: FormBuilder, private adminService: QuestionService) {
     this.addQuestionForm = this.formBuilder.group({
-      title: ['', Validators.required]
+      title: ['', Validators.required],
+      category : ['', Validators.required]
     });
     this.editQuestionForm = this.formBuilder.group({
       id: [{value: '', disabled: true}],
@@ -41,11 +46,18 @@ export class QuestionComponent implements OnInit {
     });
     this.addQuestionForm.get('title')?.valueChanges.subscribe(value => {
       this.selectQuestion(value);
+      this.questionSelected = !!value;
     });
+    this.addQuestionForm.get('category')?.valueChanges.subscribe(value => {
+      this.selectedCategory = value;
+          });
+    
   }
 
   ngOnInit(): void {
     this.getQuestions();
+    
+    
   }
 
   getQuestions(): void {
@@ -147,4 +159,19 @@ export class QuestionComponent implements OnInit {
       alert('No question selected');
     }
   }
+
+get filteredQuestions(){
+  console.log(this.selectedCategory);
+  if (this.selectedCategory){
+    return this.questions.filter(questiom => questiom.category === this.selectedCategory)
+  } else {
+    return this.questions;
+  }
+
+}
+
+
+
+
+
 }

@@ -4,6 +4,7 @@ export interface QuizResult{
     category : string;
     length: number;
     correctAnswers : number;
+    createdAt? : string;
    
  
  }

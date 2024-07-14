@@ -8,6 +8,8 @@ import {QuestionComponent} from "./components/question/question.component";
 import { UsersComponent } from './components/users/users.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { MyprofileComponent } from './components/myprofile/myprofile.component';
+import { SavequizComponent } from './components/savequiz/savequiz.component';
+import { QuizReplayComponent } from './components/quiz-replay/quiz-replay.component';
 
 
 export const routes: Routes = [
@@ -17,6 +19,8 @@ export const routes: Routes = [
   { path: 'questions', component: QuestionComponent },
   { path: 'users', component: UsersComponent },
   { path: 'profile', component: MyprofileComponent },
+  { path: 'save', component: SavequizComponent },
+  { path: 'replay', component: QuizReplayComponent },
   
   ];
 @NgModule({

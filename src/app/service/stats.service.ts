@@ -25,10 +25,10 @@ export class StatsService {
     });
   }
 
-  logResults(newResult : any, username : String ){
+  logResults(newResult : any, username : String ) : Observable<{ id : number}>{
   const headers = this.getAuthHeaders();
   const url = `${this.apiServerUrl}/stats/log/${username}`;
-  return this.http.put<any>(url, newResult, { headers }).pipe(
+  return this.http.post<any>(url, newResult, { headers }).pipe(
     catchError(this.handleError)
   );
 }
