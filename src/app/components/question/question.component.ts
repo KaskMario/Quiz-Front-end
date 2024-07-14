@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {QuestionService} from "../../service/questionService";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -18,6 +18,7 @@ import { Question } from '../../models/question';
 export class QuestionComponent implements OnInit {
 
   questions: any[] = [];
+  uniqueCategories: string[] = [];
   addQuestionForm: FormGroup;
   selectedQuestion: any = null;
   editQuestionForm: FormGroup;
@@ -26,7 +27,7 @@ export class QuestionComponent implements OnInit {
   isAddPressed: boolean = false;
   questionSelected : boolean = false;
   selectedCategory : string = "";
-  
+
 
   constructor(private formBuilder: FormBuilder, private adminService: QuestionService) {
     this.addQuestionForm = this.formBuilder.group({
@@ -51,19 +52,20 @@ export class QuestionComponent implements OnInit {
     this.addQuestionForm.get('category')?.valueChanges.subscribe(value => {
       this.selectedCategory = value;
           });
-    
+
   }
 
   ngOnInit(): void {
     this.getQuestions();
-    
-    
+
+
   }
 
   getQuestions(): void {
     this.adminService.getAllQuestions().subscribe(
       (questions) => {
         this.questions = questions;
+        this.uniqueCategories = this.getUniqueCategories(questions);
 
       })
   }
@@ -169,6 +171,10 @@ get filteredQuestions(){
   }
 
 }
+  getUniqueCategories(questions: any[]): string[] {
+    const categories = questions.map(question => question.category);
+    return [...new Set(categories)];
+  }
 
 
 

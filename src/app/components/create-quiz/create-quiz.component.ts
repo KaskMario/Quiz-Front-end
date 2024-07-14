@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Valida
 import {NgForOf, NgIf} from "@angular/common";
 import {QuizPlayerComponent} from "../quiz-player/quiz-player.component";
 import {LoginComponent} from "../login/login.component";
+import {QuestionComponent} from "../question/question.component";
 
 
 @Component({
@@ -16,6 +17,7 @@ import {LoginComponent} from "../login/login.component";
     NgForOf,
     QuizPlayerComponent,
     LoginComponent,
+    QuestionComponent,
 
   ],
   templateUrl: './create-quiz.component.html',
@@ -66,8 +68,8 @@ export class CreateQuizComponent implements OnInit {
 
       this.quizCreated = false;
       this.fetchQuizQuestions(category,difficulty,numberOfQuestions);
-      this.outputCategory = this.quizForm.value.category; 
-      this.outputDifficulty = this.quizForm.value.difficulty;   
+      this.outputCategory = this.quizForm.value.category;
+      this.outputDifficulty = this.quizForm.value.difficulty;
     }
 
   }

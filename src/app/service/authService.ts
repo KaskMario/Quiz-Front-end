@@ -35,7 +35,7 @@ export class AuthService {
   getLoggedInUsername(): Observable<string> {
     return this.loggedInUsername.asObservable();
   }
-  
+
   register(username: string, password: string, first_name: string, last_name : string, email : string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
     const user = { username, password, first_name, last_name, email };
