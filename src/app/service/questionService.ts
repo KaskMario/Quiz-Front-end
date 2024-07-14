@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
-import {AuthService} from "./authService";
+import {HttpClient} from "@angular/common/http";
+import {catchError, Observable} from "rxjs";
 import {Question} from "../models/question";
+import {ErrorService} from "./errorService";
+import {SharedService} from "./sharedService";
 
 @Injectable({
   providedIn: 'root'
@@ -11,69 +12,42 @@ import {Question} from "../models/question";
 export class QuestionService {
   private apiServerUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient,
+              private errorService: ErrorService,
+              private sharedService: SharedService) {
 
   }
 
 
   getAllQuestions(): Observable<any[]> {
     const url = `${this.apiServerUrl}/question/allQuestions`;
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    const headers = this.sharedService.getAuthHeaders();
     return this.http.get<any[]>(url, { headers }).pipe(
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'question'))
     );
   }
   deleteQuestion(id: number): Observable<any> {
     const url = `${this.apiServerUrl}/question/delete/${id}`;
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
+    const headers = this.sharedService.getAuthHeaders();
     return this.http.delete(url, { headers, responseType: 'text' }).pipe(
-      catchError(this.handleError)
-    );
+      catchError(error => this.errorService.handleError(error, 'question'))
+      );
   }
   addQuestion(question: Question): Observable<{message:string}> {
     const url = `${this.apiServerUrl}/question/add`;
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.sharedService.getAuthHeaders();
     return this.http.post<any>(url, question, { headers }).pipe(
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'question'))
     );
 
   }
 
   updateQuestion(id: number, updatedQuestion: any) {
     const url = `${this.apiServerUrl}/question/update`;
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-     // 'Content-Type': 'application/json'
-    });
+    const headers = this.sharedService.getAuthHeaders();
     return this.http.put<any>(url, updatedQuestion, { headers }).pipe(
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'question'))
     );
-  }
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      if (error.status === 403) {
-        errorMessage = 'Access forbidden: You do not have the necessary permissions to access this resource.';
-      } else {
-        errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-      }
-    }
-    console.error(errorMessage);
-    return throwError(errorMessage);
   }
 }
 

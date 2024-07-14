@@ -1,7 +1,9 @@
-import {Injectable} from "@angular/core";
+import {ErrorHandler, Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxjs";
+import {ErrorService} from "./errorService";
+import {SharedService} from "./sharedService";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private loggedInUsername = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private errorService: ErrorService,
+             ) {
   }
 
 
@@ -24,7 +28,7 @@ export class AuthService {
         this.loggedInUsername.next(username);
         this.loggedIn.next(true);
       }),
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'auth'))
 
     );
 
@@ -42,7 +46,7 @@ export class AuthService {
 
     return this.http.post(url, user, { responseType: 'text' }).pipe(
       map(response => response as string),
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'auth'))
     );
   }
 
@@ -51,7 +55,7 @@ export class AuthService {
     const params = new HttpParams().set('adminKey', adminKey);
     return this.http.post(url, { username, password, first_name, last_name, email }, { params, responseType: 'text' }).pipe(
       map(response => response as string),
-      catchError(this.handleError)
+      catchError(error => this.errorService.handleError(error, 'auth'))
     );
   }
   logout(): void {
@@ -62,24 +66,6 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('token');
-  }
- /* setUsername(username: string): void {
-    localStorage.setItem('username', username);
-  }
-  getUsername(): string | null {
-    return localStorage.getItem('username');
-  }*/
-
-  private handleError(error: any): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(errorMessage);
   }
 }
 

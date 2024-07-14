@@ -6,6 +6,8 @@ import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError, Observable } from 'rxjs';
 import { Stats } from '../models/statistics';
 import { ResultsByCategory } from '../models/resultsByCategory';
+import {ErrorService} from "./errorService";
+import {SharedService} from "./sharedService";
 
 @Injectable({
   providedIn: 'root'
@@ -14,52 +16,37 @@ export class StatsService {
 
   private apiServerUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient,
+              private errorService: ErrorService,
+              private sharedService: SharedService) {
 
-  }
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Authorization': token ? `Bearer ${token}` : ''
-    });
   }
 
   logResults(newResult : any, username : String ) : Observable<{ id : number}>{
-  const headers = this.getAuthHeaders();
+  const headers = this.sharedService.getAuthHeaders();
   const url = `${this.apiServerUrl}/stats/log/${username}`;
   return this.http.post<any>(url, newResult, { headers }).pipe(
-    catchError(this.handleError)
+    catchError(error => this.errorService.handleError(error, 'stats'))
   );
 }
 
 getStatsById(userId : number) : Observable<Stats>{
-  const headers = this.getAuthHeaders();
+  const headers = this.sharedService.getAuthHeaders();
   const url = `${this.apiServerUrl}/stats/${userId}`;
   return this.http.get<Stats>(url, { headers }).pipe(
-    catchError(this.handleError)
+    catchError(error => this.errorService.handleError(error, 'stats'))
   );
 
 }
 
-private handleError(error: HttpErrorResponse) {
-  let errorMessage = 'An unknown error occurred!';
-  if (error.error instanceof ErrorEvent) {
-    errorMessage = `Error: ${error.error.message}`;
-  } else {
-    if (error.status === 403) {
-      errorMessage = 'Access forbidden: You do not have the necessary permissions to access this resource.';
-    } else {
-      errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-    }
-  }
-  console.error(errorMessage);
-  return throwError(errorMessage);
-}
 
 public getResultsCategories(userId : number): Observable<ResultsByCategory[]>{
-  const headers = this.getAuthHeaders();
-  return this.http.get<ResultsByCategory []>(`${this.apiServerUrl}/stats/bycategory/${userId}`, { headers});}
+  const headers = this.sharedService.getAuthHeaders();
+  return this.http.get<ResultsByCategory []>(`${this.apiServerUrl}/stats/bycategory/${userId}`, { headers}).pipe(
+    catchError(error => this.errorService.handleError(error, 'stats'))
+  );
+
+  }
 
 
 
