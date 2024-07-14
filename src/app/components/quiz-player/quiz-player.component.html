@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-4" *ngIf="isQuizVisible">
     <h2>{{title}}</h2>
   <div *ngIf="currentQuestion">
     <h4>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</h4>
@@ -15,6 +15,7 @@
 
       <button class="btn btn-dark m-2" (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">Next</button>
       <button class="btn btn-dark m-2" (click)="submitQuiz()" *ngIf="currentQuestionIndex === questions.length - 1">Submit</button>
+      
     </div>
     <br>
     <div *ngIf="selectedOption">
@@ -23,8 +24,20 @@
     </div>
     <div *ngIf="showResults">
       <h5>You answered {{ correctAnswersCount }} out of {{ questions.length }} questions correctly.</h5>
-      <button class="btn btn-dark m-2" (click)="triggerStartNewQuiz()">New Quiz</button>
-      <button class="btn btn-dark m-2" (click)="logOut()">Log out</button>
+      <div *ngIf="!isReplayMode">
+        <button class="btn btn-dark m-2" (click)="triggerStartNewQuiz()">New Quiz</button>
+        <button class="btn btn-dark m-2" (click)="logOut()">Log out</button>
+        <button class="btn btn-dark m-2" (click)="saveQuiz()" >Save quiz for learning</button>
+      </div>
+      <div *ngIf="isReplayMode">
+        <button class="btn btn-dark m-2" (click)="closeReplay()">Close</button>
+      </div>
+
     </div>
   </div>
 </div>
+
+<div *ngIf="isSavePressed">
+  <app-savequiz [savedQuestions]="savedQuestions" [submittedQuizId]="submittedQuizId" (closePlayer)="onCloseSave()"></app-savequiz>
+</div>
+

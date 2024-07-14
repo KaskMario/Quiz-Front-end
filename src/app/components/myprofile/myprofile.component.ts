@@ -73,11 +73,8 @@ getUser(username : string) : void {
     },
     (error) => {
       alert(`Error fetching user: ${error}`);
-    }
-
-  )
-  
-}
+    })
+  }
 
 getRoleName(roleName : String) : String {
   if (roleName === "ROLE_USER") {

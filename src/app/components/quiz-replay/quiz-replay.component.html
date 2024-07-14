@@ -1,0 +1,45 @@
+<div *ngIf="noSavedQuiz">
+  <div class = "card p-3 bg-light mt-3">You don't have any saved quizzes. Take one and save it!</div>
+</div>
+
+
+
+
+<div *ngIf="!noSavedQuiz && isPlayerHidden">
+    <div class="container">
+        <div class="row">
+          <div class="col">Quiz submitted at:</div>
+          <div class="col">Description:</div>
+          <div class="col">Initial score:</div>
+          <div class="col"></div>
+        </div>
+      <div class = "card p-3 bg-light mt-3" *ngFor="let savedQuiz of savedQuizzes" >
+        <div class="row" (click)="handleClick(savedQuiz.id!)">
+        <div class="col">
+          {{savedQuiz.quizResult?.createdAt}}
+        </div>
+        <div class="col">
+          {{savedQuiz.description}}
+        </div>
+        <div class="col">
+          {{savedQuiz.quizResult?.correctAnswers}}/{{savedQuiz.quizResult?.length}}
+        </div>
+        <div class="col">
+
+            <div class="btn-group-sm" *ngIf="showButtons(savedQuiz.id!)">
+                <button type="button" class="btn btn-primary me-2" (click)="replay(savedQuiz.questions!)">Take it again</button>
+                <button type="button" class="btn btn-danger me-2"(click)="deleteSavedQuiz()">Delete</button>
+            </div>
+
+
+
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+<div>
+<quiz-player [isReplayMode]="isReplayMode" [questions]="questions" *ngIf="questionsNotNull && !isPlayerHidden" (closePlayer)="onCloseReplay()"></quiz-player>
+</div>

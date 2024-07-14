@@ -7,13 +7,16 @@ import {Router} from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StatsService } from '../../service/stats.service';
 import { QuizResult } from '../../models/quizResult';
+import { SavequizComponent } from '../savequiz/savequiz.component';
 
 @Component({
   selector: 'quiz-player',
   standalone: true,
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    SavequizComponent
+    
   ],
   templateUrl: './quiz-player.component.html',
   styleUrl: './quiz-player.component.css'
@@ -21,7 +24,9 @@ import { QuizResult } from '../../models/quizResult';
 export class QuizPlayerComponent implements OnInit{
   @Input() questions: any[] = [];
   @Input() formValues: any;
+  @Input() isReplayMode: boolean = false;
   @Output() newQuiz = new EventEmitter<void>();
+  @Output() closePlayer = new EventEmitter<void>();
 
   title: string = '"Practice makes perfect."';
   currentQuestionIndex: number = 0;
@@ -35,6 +40,11 @@ export class QuizPlayerComponent implements OnInit{
   isSubmitPressed: boolean = false;
   isResultSumbmitted : boolean = false;
   loggedInUsername : String = "";
+  savedQuestions : string = "";
+  submittedQuizId! : number;
+  isSavePressed : boolean = false;
+  isQuizVisible : boolean = true;
+
  
 
 
@@ -42,7 +52,8 @@ export class QuizPlayerComponent implements OnInit{
   constructor(private quizService: QuizService,
               private authService: AuthService,
               private statsService : StatsService,
-              private router: Router ) {}
+              private router: Router,
+               ) {}
 
   ngOnInit(): void {
     if (this.questions.length > 0) {
@@ -51,6 +62,9 @@ export class QuizPlayerComponent implements OnInit{
     this.correctAnswersCount=0;
     this.showResults = false;
     this.isResultSumbmitted = false;
+    this.isQuizVisible = true;
+    this.isSavePressed = false;
+    console.log(this.isReplayMode);
   }
 
   onOptionSelected(option: string): void {
@@ -113,23 +127,35 @@ submitResults(){
   this.statsService.logResults(newResult, this.loggedInUsername).subscribe(
     (response) => {
       console.log('Results logged');
-    },
+      this.submittedQuizId = response.id;
+          },
     (error) => {
       alert(`Error logging results: ${error}`);
     }
   );
-  
-  
-  
-  console.log(newResult, this.loggedInUsername);
-  
-
 }
 
+saveQuiz() {
+  const quizQuestions : string[]= [];
+  for (let i = 0; i < this.questions.length; i++) {
+    quizQuestions[i] = this.questions[i].id;
+    }
+  console.log(quizQuestions.join('x'));
+  this.savedQuestions = quizQuestions.join('x');
+  this.isSavePressed = true;
+  this.isQuizVisible = false;
+  console.log(this.submittedQuizId)
+}
 
+onCloseSave(){
+  this.isSavePressed = false;
+  this.isQuizVisible = true;
+}
 
-
-
+closeReplay(){
+  this.closePlayer.emit();
+  console.log("works")
+}
 
 
 }

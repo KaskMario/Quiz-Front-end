@@ -1,18 +1,23 @@
-<div>
-  <h2>Login</h2>
- <form (ngSubmit)="login()">
-  <div class="form-group m-2 p-2">
-    <label class="form-label" for="username">Username</label>
-    <input class="form-control" [(ngModel)]="username" type="text" name="username" id="username" required>
+<div class="d-flex justify-content-center">
+  <div class="card" style="width: 35%; height: 24rem;">
+    <h2 class="text-center mt-3" >Login</h2>
+  <form (ngSubmit)="login()">
+    <div class="form-group m-2 p-2">
+      
+      <input class="form-control" [(ngModel)]="username" type="text" name="username" placeholder="Username:" id="username" required>
   </div>
-  <div class="form-group m-2 p-2">
-    <label class="form-label" for="password">Password</label>
-    <input class="form-control" [(ngModel)]="password" type="password" name="password" id="password" required>
-  </div>
-  <div class="form-group m-2 p-2">
-    <button class="btn btn-dark" type="submit">Login</button>
-  </div>
- </form>
+   <div class="form-group m-2 p-2">
+      
+     <input class="form-control" [(ngModel)]="password" type="password" name="password" id="password" required placeholder="Password:">
+    </div>
+   <div class="m-2 p-2">
+     <button class="form control btn btn-dark" type="submit">Login</button>
+   </div>
+  </form>
+  <div class="text-center">----- or register -----</div>
+
+
+</div> 
 </div>
 
 
