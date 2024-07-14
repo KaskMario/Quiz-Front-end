@@ -19,9 +19,8 @@ export const routes: Routes = [
   { path: 'questions', component: QuestionComponent },
   { path: 'users', component: UsersComponent },
   { path: 'profile', component: MyprofileComponent },
-  { path: 'save', component: SavequizComponent },
   { path: 'replay', component: QuizReplayComponent },
-  
+
   ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

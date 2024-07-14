@@ -55,7 +55,7 @@ export class QuestionService {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+     // 'Content-Type': 'application/json'
     });
     return this.http.put<any>(url, updatedQuestion, { headers }).pipe(
       catchError(this.handleError)
