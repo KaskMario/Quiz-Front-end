@@ -1,10 +1,8 @@
 <header class="container-fluid bg-black text-white p-3 sticky-header">
   <div class="d-flex justify-content-between align-items-center">
   <h1>{{title}}</h1>
-  <nav>
+  <nav *ngIf="isLoggedIn">
     <a class="col btn p-2 m-2 btn-light" routerLink="">Home</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/login">Login</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/register">Register</a>
     <a class="col btn p-2 m-2 btn-light" routerLink="/questions">Questions</a>
     <a class="col btn p-2 m-2 btn-light" routerLink="/users">Users</a>
     <a class="col btn p-2 m-2 btn-light" routerLink="/profile">My Profile</a>
