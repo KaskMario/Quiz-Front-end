@@ -61,6 +61,19 @@ export class QuestionService {
       catchError(this.handleError)
     );
   }
+
+  getUnapprovedQuestions(): Observable<any[]> {
+    const url = `${this.apiServerUrl}/question/unapproved`;
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get<any[]>(url, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (error.error instanceof ErrorEvent) {
@@ -76,4 +89,3 @@ export class QuestionService {
     return throwError(errorMessage);
   }
 }
-
