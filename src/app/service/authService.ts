@@ -1,9 +1,11 @@
-import {ErrorHandler, Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {BehaviorSubject, catchError, map, Observable, tap, throwError} from "rxjs";
-import {ErrorService} from "./errorService";
-import {SharedService} from "./sharedService";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { ErrorService } from './errorService';
+import { jwtDecode } from 'jwt-decode';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +15,9 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private loggedInUsername = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient,
-              private errorService: ErrorService,
-             ) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
+    this.loadToken();
   }
-
 
   login(username: string, password: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/login`;
@@ -25,22 +25,13 @@ export class AuthService {
       map(response => response as string),
       tap(token => {
         localStorage.setItem('token', token);
-        this.loggedInUsername.next(username);
-        this.loggedIn.next(true);
+        this.setAuthState(token);
       }),
       catchError(error => this.errorService.handleError(error, 'auth'))
-
     );
-
-  }
-  isLoggedIn(): Observable<boolean> {
-    return this.loggedIn.asObservable();
-  }
-  getLoggedInUsername(): Observable<string> {
-    return this.loggedInUsername.asObservable();
   }
 
-  register(username: string, password: string, first_name: string, last_name : string, email : string): Observable<string> {
+  register(username: string, password: string, first_name: string, last_name: string, email: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register`;
     const user = { username, password, first_name, last_name, email };
 
@@ -50,7 +41,7 @@ export class AuthService {
     );
   }
 
-  registerAdmin(username: string, password: string, first_name: string, last_name : string, email : string, adminKey: string): Observable<string> {
+  registerAdmin(username: string, password: string, first_name: string, last_name: string, email: string, adminKey: string): Observable<string> {
     const url = `${this.apiServerUrl}/auth/register-admin`;
     const params = new HttpParams().set('adminKey', adminKey);
     return this.http.post(url, { username, password, first_name, last_name, email }, { params, responseType: 'text' }).pipe(
@@ -58,6 +49,7 @@ export class AuthService {
       catchError(error => this.errorService.handleError(error, 'auth'))
     );
   }
+
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
@@ -67,11 +59,47 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.loggedIn.asObservable();
+  }
+
+  getLoggedInUsername(): Observable<string> {
+    return this.loggedInUsername.asObservable();
+  }
+
+  public loadToken(): void {
+    const token = localStorage.getItem('token');
+    if (token && !this.isTokenExpired(token)) {
+      this.setAuthState(token);
+    }
+  }
+
+  private setAuthState(token: string): void {
+    const decodedToken: any = jwtDecode(token);
+    this.loggedInUsername.next(decodedToken.username);
+    this.loggedIn.next(true);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const decodedToken: any = jwtDecode(token);
+    const expiryTime = decodedToken.exp * 1000;
+    return (Date.now() > expiryTime);
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  getProtectedResource(): Observable<any> {
+    const url = `${this.apiServerUrl}/protected/resource`;
+    const headers = this.getAuthHeaders();
+    return this.http.get(url, { headers }).pipe(
+      catchError(error => this.errorService.handleError(error, 'protected'))
+    );
+  }
 }
-
-
-
-
-
-
-
