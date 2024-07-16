@@ -14,6 +14,7 @@ export class AuthService {
   private apiServerUrl = environment.apiBaseUrl;
   private loggedIn = new BehaviorSubject<boolean>(false);
   private loggedInUsername = new BehaviorSubject<string>('');
+  private userRole = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient, private errorService: ErrorService) {
     this.loadToken();
@@ -68,6 +69,10 @@ export class AuthService {
     return this.loggedInUsername.asObservable();
   }
 
+  getUserRole(): Observable<string> {
+    return this.userRole.asObservable();
+  }
+
   public loadToken(): void {
     const token = localStorage.getItem('token');
     if (token && !this.isTokenExpired(token)) {
@@ -78,6 +83,7 @@ export class AuthService {
   private setAuthState(token: string): void {
     const decodedToken: any = jwtDecode(token);
     this.loggedInUsername.next(decodedToken.username);
+    this.userRole.next(decodedToken.roles[0]);
     this.loggedIn.next(true);
   }
 

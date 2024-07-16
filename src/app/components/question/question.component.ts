@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {QuestionService} from "../../service/questionService";
-import {NgForOf, NgIf} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { QuestionService } from '../../service/questionService';
+import { NgForOf, NgIf } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Question } from '../../models/question';
+import { AuthService } from '../../service/authService';
 
 @Component({
   selector: 'app-question',
@@ -13,11 +14,12 @@ import { Question } from '../../models/question';
     NgIf
   ],
   templateUrl: './question.component.html',
-  styleUrl: './question.component.css'
+  styleUrls: ['./question.component.css']
 })
 export class QuestionComponent implements OnInit {
 
   questions: any[] = [];
+  unapprovedQuestions: Question[] = [];
   uniqueCategories: string[] = [];
   addQuestionForm: FormGroup;
   selectedQuestion: any = null;
@@ -25,17 +27,21 @@ export class QuestionComponent implements OnInit {
   isEditVisible: boolean = false;
   isDeleted: boolean = false;
   isAddPressed: boolean = false;
-  questionSelected : boolean = false;
-  selectedCategory : string = "";
+  questionSelected: boolean = false;
+  selectedCategory: string = '';
+  userRole: string = '';
 
-
-  constructor(private formBuilder: FormBuilder, private adminService: QuestionService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private questionService: QuestionService,
+    private authService: AuthService
+  ) {
     this.addQuestionForm = this.formBuilder.group({
       title: ['', Validators.required],
-      category : ['', Validators.required]
+      category: ['', Validators.required]
     });
     this.editQuestionForm = this.formBuilder.group({
-      id: [{value: '', disabled: true}],
+      id: [{ value: '', disabled: true }],
       questionTitle: ['', Validators.required],
       option1: ['', Validators.required],
       option2: ['', Validators.required],
@@ -51,23 +57,35 @@ export class QuestionComponent implements OnInit {
     });
     this.addQuestionForm.get('category')?.valueChanges.subscribe(value => {
       this.selectedCategory = value;
-          });
-
+    });
   }
 
   ngOnInit(): void {
+    this.selectedQuestion = null;
     this.getQuestions();
-
-
+    this.authService.getUserRole().subscribe(role => {
+      this.userRole = role;
+      if (role === 'ROLE_ADMIN') {
+        this.getUnapprovedQuestions();
+      }
+    });
   }
 
   getQuestions(): void {
-    this.adminService.getAllQuestions().subscribe(
+    this.questionService.getAllQuestions().subscribe(
       (questions) => {
         this.questions = questions;
         this.uniqueCategories = this.getUniqueCategories(questions);
+      }
+    );
+  }
 
-      })
+  getUnapprovedQuestions(): void {
+    this.questionService.getUnapprovedQuestions().subscribe(
+      questions => {
+        this.unapprovedQuestions = questions;
+      }
+    );
   }
 
   selectQuestion(questionTitle: string): void {
@@ -88,7 +106,7 @@ export class QuestionComponent implements OnInit {
       ...this.editQuestionForm.getRawValue(),
       id: this.selectedQuestion.id
     };
-    this.adminService.updateQuestion(updatedQuestion.id, updatedQuestion).subscribe(
+    this.questionService.updateQuestion(updatedQuestion.id, updatedQuestion).subscribe(
       (response) => {
         const index = this.questions.findIndex(q => q.id === updatedQuestion.id);
         if (index !== -1) {
@@ -118,35 +136,32 @@ export class QuestionComponent implements OnInit {
     };
     delete newQuestion.id;
 
-    this.adminService.addQuestion(newQuestion).subscribe(
+    this.questionService.addQuestion(newQuestion).subscribe(
       (response) => {
         this.questions.push(response);
         this.isEditVisible = false;
+        this.ngOnInit()
         alert('Question added successfully');
       },
       (error) => {
         alert(`Error adding question: ${error}`);
       }
     );
-
   }
 
   cancelEdit(): void {
     this.isEditVisible = false;
   }
 
-  onSubmit(): void {
-  }
-
-  delete() {
+  delete(): void {
     if (this.selectedQuestion) {
       if (confirm('Are you sure you want to delete this question?')) {
-        this.adminService.deleteQuestion(this.selectedQuestion.id).subscribe(
+        this.questionService.deleteQuestion(this.selectedQuestion.id).subscribe(
           response => {
-            alert(response.message || 'Question deleted successfully');
-            this.getQuestions();
             this.selectedQuestion = null;
             this.isDeleted = true;
+            this.ngOnInit();
+            alert(response.message || 'Question deleted successfully');
           },
           error => {
             if (error.status === 404) {
@@ -162,22 +177,49 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-get filteredQuestions(){
-  console.log(this.selectedCategory);
-  if (this.selectedCategory){
-    return this.questions.filter(questiom => questiom.category === this.selectedCategory)
-  } else {
-    return this.questions;
+  approve(questionId: number): void {
+    if (this.userRole === 'ROLE_ADMIN') {
+      this.questionService.approveQuestion(questionId).subscribe(
+        response => {
+          alert('Question approved successfully');
+          this.ngOnInit();
+        },
+        error => {
+          alert(`Error approving question: ${error}`);
+        }
+      );
+    } else {
+      alert('You do not have permission to approve questions.');
+    }
   }
 
-}
+  viewQuestion(question: Question): void {
+    this.selectedQuestion = question;
+    this.isEditVisible = true;
+    this.isAddPressed = false;
+    this.editQuestionForm.patchValue(this.selectedQuestion);
+  }
+
+  viewUnapprovedQuestion(question: Question): void {
+    this.selectedQuestion = question;
+    this.isEditVisible = false;
+    this.isAddPressed = false;
+    this.editQuestionForm.patchValue(this.selectedQuestion);
+  }
+
+  get filteredQuestions() {
+    if (this.selectedCategory) {
+      return this.questions.filter(question => question.category === this.selectedCategory);
+    } else {
+      return this.questions;
+    }
+  }
+
   getUniqueCategories(questions: any[]): string[] {
     const categories = questions.map(question => question.category);
     return [...new Set(categories)];
   }
 
-
-
-
-
+  onSubmit(): void {
+  }
 }

@@ -1,13 +1,14 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AuthService} from "../../service/authService";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -26,7 +27,6 @@ export class LoginComponent {
         localStorage.setItem('token', token);
         this.loggedIn.emit(this.username);
         this.router.navigate(['/']);
-        alert("Login successful");
       },
       error: err => {
         console.error('Login failed', err);

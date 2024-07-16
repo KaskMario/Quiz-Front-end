@@ -46,15 +46,15 @@ export class ErrorService {
     }
   }
 
-  private getQuestionErrorMessage(error: HttpErrorResponse): string {
-    if (error.status === 404) {
-      return 'Question not found.';
-    } else if (error.status === 403) {
-      return 'Access forbidden: You do not have the necessary permissions to access this resource.';
-    } else {
-      return `Question Error - Code: ${error.status}, Message: ${error.message}`;
+    private getQuestionErrorMessage(error: HttpErrorResponse): string {
+      if (error.status === 404) {
+        return 'Question not found.';
+      } else if (error.status === 403) {
+        return 'Access forbidden: You do not have the necessary permissions to access this resource.';
+      } else {
+        return `Question Error - Code: ${error.status}, Message: ${error.message}`;
+      }
     }
-  }
 
   private getQuizErrorMessage(error: HttpErrorResponse): string {
     return `Quiz Error - Code: ${error.status}, Message: ${error.message}`;

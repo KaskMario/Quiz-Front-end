@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import {AuthService} from "../../service/authService";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 
@@ -9,10 +9,11 @@ import {NgIf} from "@angular/common";
 @Component({
   selector: 'app-register',
   standalone: true,
-   imports: [
+  imports: [
     FormsModule,
     NgIf,
-    
+    RouterLink,
+
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -29,7 +30,7 @@ export class RegisterComponent {
   @Output() loggedIn = new EventEmitter<string>();
 
 
-  constructor(private authService: AuthService, private router: Router,  ) {
+  constructor(private authService: AuthService, private router: Router) {
     }
 
 
@@ -39,7 +40,7 @@ export class RegisterComponent {
       this.authService.registerAdmin(this.username, this.password, this.first_name, this.last_name, this.email, this.adminKey).subscribe({
         next: message => {
           console.log('Admin registration successful:', message);
-          this.router.navigate(['/login']); // Redirect to the login page or any other page
+          this.router.navigate(['/login']);
         },
         error: err => {
           console.error('Registration failed', err);
@@ -50,7 +51,7 @@ export class RegisterComponent {
       this.authService.register(this.username, this.password, this.first_name, this.last_name, this.email).subscribe({
         next: message => {
           console.log('Registration successful:', message);
-                 
+
           this.authService.login(this.username, this.password).subscribe({
             next: token => {
               localStorage.setItem('token', token);
@@ -70,6 +71,7 @@ export class RegisterComponent {
     }
   }
 
-
-
+  goBack(): void {
+    this.router.navigate(['/login']);
+  }
 }
