@@ -1,7 +1,7 @@
 
-<div *ngIf="!quizCreated">
-  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
-    <h2>Quiz</h2>
+<div class="d-flex justify-content-center" *ngIf="!quizCreated">
+  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+    <h2 class="m-2">Quiz</h2>
     <div class="form-group m-2 p-2">
       <label class="form-label" for="category">Category:</label>
       <select id="category" class="form-control" formControlName="category" required>

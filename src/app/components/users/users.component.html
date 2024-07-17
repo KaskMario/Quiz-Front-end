@@ -11,18 +11,18 @@
             <div class="card-body row">
                 <div class="col-12 card-title align-self-center mb-0">
                   <h4 class = "mb-0">{{user?.username}}</h4>
-                  <p >{{getRoleName(user.role.role)}}</p>             
+                  <p >{{getRoleName(user.role.role)}}</p>
                   <h6 class = "mb-0">{{user?.first_name}} {{user?.last_name}}</h6>
                   <p class="m-0">{{user?.email}}</p>
                </div>
             </div>
-            
+
             <div class="card-body" >
                <div class="btn-group-sm" *ngIf="showButtons(user.id)">
                 <button type="button" class="btn btn-primary me-2" (click)="edit(user.id); $event.stopPropagation()">Edit</button>
                 <button type="button" class="btn btn-danger me-2"(click)="deleteSelected(user.id); $event.stopPropagation()">Delete</button>
                 <button type="button" class="btn btn-primary me-2" (click)="showStatistics(); $event.stopPropagation()">Statistics</button>
-             
+
                </div>
             </div>
          </div>
@@ -60,19 +60,19 @@
         </div>
         <div class="card-body" >
             <div class="  btn-group-sm m-2 p-2" >
-             <button type="button" class="btn btn-primary me-2" type="submit" (click) ="saveEdit()">Save changes</button>
+             <button type="button" class="btn btn-dark me-2" type="submit" (click) ="saveEdit()">Save changes</button>
              <button type="button" class="btn btn-secondary me-2" (click)="discardEdit()">Discard</button>
              <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete user</button>
-             
-          
+
+
             </div>
          </div>
          </form>
          </div>
-        
+
 
 
          <div *ngIf="showStats">
           <app-stats [selectedUserId]="selectedUserId" [selectedUsername]="selectedUsername" (closeStats)="onCloseStats()"></app-stats>
          </div>
-    
+

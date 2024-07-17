@@ -100,12 +100,4 @@ export class AuthService {
       'Authorization': `Bearer ${token}`
     });
   }
-
-  getProtectedResource(): Observable<any> {
-    const url = `${this.apiServerUrl}/protected/resource`;
-    const headers = this.getAuthHeaders();
-    return this.http.get(url, { headers }).pipe(
-      catchError(error => this.errorService.handleError(error, 'protected'))
-    );
-  }
 }

@@ -1,23 +1,31 @@
-<header class="container-fluid bg-black text-white p-3 sticky-header">
-  <div class="d-flex justify-content-between align-items-center">
-  <h1>{{title}}</h1>
-  <nav *ngIf="isLoggedIn">
-    <a class="col btn p-2 m-2 btn-light" routerLink="">Home</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/questions">Questions</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/users">Users</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/profile">My Profile</a>
-    <a class="col btn p-2 m-2 btn-light" routerLink="/replay">replay</a>
-    <a class="col btn p-2 m-2 btn-outline-secondary" (click)="logout()">Logout</a>
-
-  </nav>
-    <div *ngIf="isLoggedIn" class="text-light">
-      <span>Welcome, {{ loggedInUsername.toUpperCase() }}</span>
+<header class="container-fluid bg-dark text-white p-3 sticky-header">
+  <div [ngClass]="{'row': isLoggedIn}">
+    <div class="col d-flex justify-content-center align-items-center">
+      <img src="assets/logo.svg" alt="Java Quiz" height="90"/>
+    </div>
+    <div class="col d-flex justify-content-center align-items-center">
+      <nav *ngIf="isLoggedIn">
+        <a class="p-2 m-2 white-item text-uppercase" routerLink="">Home</a>
+        <a class="p-2 m-2 white-item text-uppercase" routerLink="/questions">Questions</a>
+        <a *ngIf="userRole === 'ROLE_ADMIN'" class="p-2 m-2 white-item text-uppercase" routerLink="/users">Users</a>
+        <a class="p-2 m-2 white-item text-uppercase" routerLink="/replay">Replay</a>
+      </nav>
+    </div>
+    <div *ngIf="isLoggedIn" class="col d-flex justify-content-center align-items-center text-light">
+      <a class="m-2" routerLink="/profile">
+        <svg class="white-button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" height="25" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+        </svg>
+      </a>
+      <a (click)="logout()" style="cursor: pointer;">
+        <svg class="gray-button" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" height="25">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+        </svg>
+      </a>
     </div>
   </div>
 </header>
 
-<main class="container mt-3">
+<main class="container mt-3 content-height">
   <router-outlet></router-outlet>
 </main>
-
-

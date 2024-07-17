@@ -7,7 +7,7 @@ import { QuizPlayerComponent } from "./components/quiz-player/quiz-player.compon
 import { RegisterComponent } from "./components/register/register.component";
 import { LoginComponent } from "./components/login/login.component";
 import { AuthService } from "./service/authService";
-import { NgIf } from "@angular/common";
+import {NgClass, NgIf, NgOptimizedImage} from "@angular/common";
 import { QuestionComponent } from "./components/question/question.component";
 
 @Component({
@@ -23,7 +23,9 @@ import { QuestionComponent } from "./components/question/question.component";
     FormsModule,
     QuizPlayerComponent,
     RouterLink,
-    NgIf
+    NgIf,
+    NgOptimizedImage,
+    NgClass
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit {
   title = 'Java Quiz';
   isLoggedIn: boolean = false;
   loggedInUsername: string = '';
+  userRole: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -39,6 +42,7 @@ export class AppComponent implements OnInit {
     this.authService.loadToken();
     this.authService.isLoggedIn().subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
     this.authService.getLoggedInUsername().subscribe(username => this.loggedInUsername = username);
+    this.authService.getUserRole().subscribe(role => this.userRole = role);
   }
 
   logout(): void {
