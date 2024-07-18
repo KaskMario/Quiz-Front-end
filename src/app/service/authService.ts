@@ -54,7 +54,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
-    this.loggedInUsername.next('');
   }
 
   getToken(): string | null {
