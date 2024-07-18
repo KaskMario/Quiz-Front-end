@@ -1,5 +1,5 @@
 <div class="m-4 d-flex justify-content-center">
-  <form [formGroup]="addQuestionForm" (ngSubmit)="onSubmit()" style="width: 50%;">
+  <form [formGroup]="addQuestionForm" (ngSubmit)="onSubmit()" class="section-50">
     <h2 class="m-2">{{ userRole === 'ROLE_ADMIN' ? 'Questions' : 'Look up questions!' }}</h2>
 
     <div class="form-group m-2 p-2">
@@ -37,7 +37,7 @@
   </div>
 </div>
 <div class="m-4 d-flex justify-content-center">
-  <div *ngIf="isEditVisible" class="m-2 p-2" style="width: 50%;">
+  <div *ngIf="isEditVisible" class="m-2 p-2 section-50">
     <h3>{{ isAddPressed ? 'Add Question' : 'Edit Question' }}</h3>
     <form [formGroup]="editQuestionForm" (ngSubmit)="isAddPressed ? saveAddedQuestion() : saveEdit()">
       <div class="form-group">
@@ -82,7 +82,7 @@
   </div>
 </div>
 <div class="m-4 d-flex justify-content-center">
-  <div *ngIf="unapprovedQuestions.length > 0" style="width: 50%;">
+  <div *ngIf="unapprovedQuestions.length > 0" class="section-50">
     <h2>Unapproved Questions</h2>
     <ul>
       <li class="mt-2" *ngFor="let question of unapprovedQuestions">

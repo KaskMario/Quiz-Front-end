@@ -7,3 +7,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 130px;
   height: auto;
 }
+
+.section-35 {
+  width: 35%;
+  min-width: 390px;
+}
+
+.section-50 {
+  width: 50%;
+  min-width: 390px;
+}
+
+@media (max-width: 768px) {
+  .section-35 {
+    width: 95%;
+    min-width: 275px;
+  }
+
+  .section-50 {
+    width: 95%;
+    min-width: 275px;
+  }
+}
