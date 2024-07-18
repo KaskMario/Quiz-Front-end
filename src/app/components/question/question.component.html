@@ -12,14 +12,7 @@
       <select id="title" class="form-control" formControlName="title" required>
         <option *ngFor="let question of filteredQuestions" [value]="question.questionTitle">{{question.questionTitle}}</option>
       </select>
-
-      <div class ="mt-3" >
-        <button *ngIf="userRole === 'ROLE_ADMIN'" type="button" class="btn btn-dark me-2" (click)="edit()">Edit</button>
-        <button type="button" class="btn btn-dark me-2" (click)="add()">{{ userRole === 'ROLE_ADMIN' ? 'Add' : 'Suggest your own' }}</button>
-        <button *ngIf="userRole === 'ROLE_ADMIN'" type="button" class="btn btn-danger" (click)="delete()">Delete</button>
-      <label class="form-label" for="title"></label>
-    </div>
-
+      <button type="button" class="btn btn-dark me-2 mt-3" (click)="add()">{{ userRole === 'ROLE_ADMIN' ? 'Add' : 'Suggest your own' }}</button>
     </div>
   </form>
 </div>
@@ -34,6 +27,11 @@
     <p><strong>Right Answer:</strong> {{ selectedQuestion.rightAnswer }}</p>
     <p><strong>Difficulty Level:</strong> {{ selectedQuestion.difficultyLevel }}</p>
     <p><strong>Category:</strong> {{ selectedQuestion.category }}</p>
+    <div class ="mt-3" >
+      <button *ngIf="userRole === 'ROLE_ADMIN'" type="button" class="btn btn-dark me-2" (click)="edit()">Edit</button>
+      <button *ngIf="userRole === 'ROLE_ADMIN'" type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+      <label class="form-label" for="title"></label>
+    </div>
   </div>
 </div>
 <div class="m-4 d-flex justify-content-center">
