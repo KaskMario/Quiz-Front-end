@@ -6,6 +6,8 @@ Users can also save taken quizes and replay them.
 Regular account can suggest their own questions for others to solve.
 They also have access to their profile and can edit it.
 
+Testtesttest
+
 ## Setup
 
 To get the frontend running for local development environment you need to:
