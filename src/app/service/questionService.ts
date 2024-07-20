@@ -19,10 +19,10 @@ export class QuestionService {
   }
 
 
-  getAllQuestions(): Observable<any[]> {
+  getAllQuestions(): Observable<Question[]> {
     const url = `${this.apiServerUrl}/question/allQuestions`;
     const headers = this.sharedService.getAuthHeaders();
-    return this.http.get<any[]>(url, { headers }).pipe(
+    return this.http.get<Question[]>(url, { headers }).pipe(
       catchError(error => this.errorService.handleError(error, 'question'))
     );
   }
@@ -46,6 +46,22 @@ export class QuestionService {
     const url = `${this.apiServerUrl}/question/update`;
     const headers = this.sharedService.getAuthHeaders();
     return this.http.put<any>(url, updatedQuestion, { headers }).pipe(
+      catchError(error => this.errorService.handleError(error, 'question'))
+    );
+  }
+
+  getUnapprovedQuestions(): Observable<Question[]> {
+    const url = `${this.apiServerUrl}/question/unapproved`;
+    const headers = this.sharedService.getAuthHeaders();
+    return this.http.get<Question[]>(url, { headers }).pipe(
+      catchError(error => this.errorService.handleError(error, 'question'))
+    );
+  }
+
+  approveQuestion(id: number): Observable<any> {
+    const url = `${this.apiServerUrl}/question/approve/${id}`;
+    const headers = this.sharedService.getAuthHeaders();
+    return this.http.put<any>(url, {}, { headers }).pipe(
       catchError(error => this.errorService.handleError(error, 'question'))
     );
   }

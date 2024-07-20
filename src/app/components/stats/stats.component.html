@@ -10,7 +10,7 @@
 
             <div class="card-body">
                 <h3 class="card-title">Scores:</h3>
-                <p class="card-text">On easy level: 
+                <p class="card-text">On easy level:
                     <span style="font-size: 24px;">{{stats.easyScore}} %</span>
                 </p>
                 <p class="card-text">On medium level:
@@ -23,21 +23,21 @@
 
 
         </div>
-        
-        <p class="card-text">Number of quizzes taken: 
+
+        <p class="card-text">Number of quizzes taken:
             <span style="font-size: 24px;">{{stats.gamePlayed}}</span>
         </p>
-        <p class="card-text">Favourite category: 
+        <p class="card-text">Favourite category:
             <span style="font-size: 24px;">{{stats.favouriteCategory}}</span>
         </p>
-        <p class="card-text">Preferred length: 
+        <p class="card-text">Preferred length:
             <span style="font-size: 24px;">{{stats.preferredLength}} questions</span>
         </p>
-        <p class="card-text">How many quizzes with 100% score: 
+        <p class="card-text">How many quizzes with 100% score:
             <span style="font-size: 24px;">{{stats.flawlessCount}}</span>
         </p>
-        
-        
+
+
       </div>
 
       <div>
@@ -45,11 +45,11 @@
         <div *ngFor="let result of resultsByCategory" class="card mb-3 col-md col-xl-" style="margin-left: 15px; margin-right: 15px;">
             <div class="card-body">
            <p><span style = "font-size: 24px;">{{result.category}}</span> <span style="float: right;">score: <span style="font-size: 24px;">{{result.score}} %</span></span>
-            <p>Number of quizzes: {{result.quizzesTotal}}, 
-            with total of {{result.questionsTotal}} questions.</p> 
-    
+            <p>Number of quizzes: {{result.quizzesTotal}},
+            with total of {{result.questionsTotal}} questions.</p>
+
         </div>
-        </div> 
+        </div>
     </div>
 
       <div class="card-footer text-muted">
@@ -73,5 +73,5 @@
 
 
 <div style="margin-top: 25px; margin-left: 12px;">
-<button class="btn btn-secondary" (click) ="onCloseStats()">Close</button>
+<button class="btn btn-dark" (click) ="onCloseStats()">Close</button>
 </div>

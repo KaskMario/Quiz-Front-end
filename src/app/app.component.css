@@ -3,3 +3,33 @@
   top: 0;
   z-index: 10000;
 }
+
+.content-height {
+  height: 100%;
+}
+
+.white-button {
+  color: white;
+  &:hover {
+    color: lightgray;
+  }
+}
+
+.gray-button {
+  color: gray;
+  &:hover {
+    color: lightgray;
+  }
+}
+
+.white-item {
+  color: white;
+  text-decoration: none;
+  &:hover {
+    color: lightgray;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    text-decoration-color: red;
+  }
+}
+

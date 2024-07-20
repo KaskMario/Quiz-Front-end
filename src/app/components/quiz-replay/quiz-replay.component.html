@@ -1,9 +1,6 @@
-<div *ngIf="noSavedQuiz">
+<div *ngIf="noSavedQuiz" class="m-4 d-flex justify-content-center">
   <div class = "card p-3 bg-light mt-3">You don't have any saved quizzes. Take one and save it!</div>
 </div>
-
-
-
 
 <div *ngIf="!noSavedQuiz && isPlayerHidden">
     <div class="container">
@@ -31,14 +28,11 @@
                 <button type="button" class="btn btn-danger me-2"(click)="deleteSavedQuiz()">Delete</button>
             </div>
 
-
-
         </div>
       </div>
-    </div>
+  </div>
+  </div>
 </div>
-</div>
-
 
 <div>
 <quiz-player [isReplayMode]="isReplayMode" [questions]="questions" *ngIf="questionsNotNull && !isPlayerHidden" (closePlayer)="onCloseReplay()"></quiz-player>

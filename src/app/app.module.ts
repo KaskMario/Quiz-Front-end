@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { StatsComponent } from './components/stats/stats.component';
+import { QuestionComponent } from './components/question/question.component';
 
 @NgModule({
 
@@ -13,7 +14,8 @@ import { StatsComponent } from './components/stats/stats.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    StatsComponent
+    StatsComponent,
+    QuestionComponent
   ],
   providers: [],
 })
