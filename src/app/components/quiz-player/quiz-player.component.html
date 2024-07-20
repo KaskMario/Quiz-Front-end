@@ -38,6 +38,6 @@
 </div>
 
 <div *ngIf="isSavePressed">
-  <app-savequiz [savedQuestions]="savedQuestions" [submittedQuizId]="submittedQuizId" (closePlayer)="onCloseSave()"></app-savequiz>
+  <app-savequiz [savedQuestions]="savedQuestions" [submittedQuizId]="submittedQuizId" [isQuizSaved]="isQuizSaved" (isSaved)="onQuizSaved($event)" (closeIt)="onCloseSave()"></app-savequiz>
 </div>
 
