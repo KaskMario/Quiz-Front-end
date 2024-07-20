@@ -88,6 +88,10 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  isUnapproved(selectedQuestion: any): boolean {
+    return selectedQuestion && !selectedQuestion.approved;
+  }
+
   selectQuestion(questionTitle: string): void {
     this.isDeleted = false;
     this.selectedQuestion = this.questions.find(q => q.questionTitle === questionTitle);
