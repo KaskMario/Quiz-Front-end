@@ -11,9 +11,11 @@ import { MyprofileComponent } from './components/myprofile/myprofile.component';
 import { SavequizComponent } from './components/savequiz/savequiz.component';
 import { QuizReplayComponent } from './components/quiz-replay/quiz-replay.component';
 import { authGuard } from './auth.guard';
+import {HomeComponent} from "./components/home/home.component";
 
 
 export const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: '', component: CreateQuizComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -22,7 +24,7 @@ export const routes: Routes = [
   { path: 'profile', component: MyprofileComponent, canActivate: [authGuard] },
   { path: 'save', component: SavequizComponent,canActivate: [authGuard] },
   { path: 'replay', component: QuizReplayComponent, canActivate: [authGuard] },
-  
+
   ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
