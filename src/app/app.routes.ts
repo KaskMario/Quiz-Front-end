@@ -12,11 +12,12 @@ import { SavequizComponent } from './components/savequiz/savequiz.component';
 import { QuizReplayComponent } from './components/quiz-replay/quiz-replay.component';
 import { authGuard } from './auth.guard';
 import {HomeComponent} from "./components/home/home.component";
+import { AuthRedirectGuard } from './auth-redirect.guard';
 
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: '', component: CreateQuizComponent, canActivate: [authGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthRedirectGuard] },
+  { path: 'create-quiz', component: CreateQuizComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'questions', component: QuestionComponent, canActivate: [authGuard] },
