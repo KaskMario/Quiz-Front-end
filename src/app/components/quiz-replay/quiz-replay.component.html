@@ -16,7 +16,7 @@
       <div class = "card p-3 bg-light mt-3" *ngFor="let savedQuiz of savedQuizzes" >
         <div class="row" (click)="handleClick(savedQuiz.id!)">
         <div class="col">
-          {{savedQuiz.quizResult?.createdAt}}
+          {{savedQuiz.quizResult?.createdAt | date: "dd-MM-yyyy HH:mm"}}
         </div>
         <div class="col">
           {{savedQuiz.description}}

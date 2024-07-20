@@ -44,6 +44,7 @@ export class QuizPlayerComponent implements OnInit{
   submittedQuizId! : number;
   isSavePressed : boolean = false;
   isQuizVisible : boolean = true;
+  isQuizSaved : boolean = false;
 
  
 
@@ -65,6 +66,7 @@ export class QuizPlayerComponent implements OnInit{
     this.isQuizVisible = true;
     this.isSavePressed = false;
     console.log(this.isReplayMode);
+    console.log(this.isQuizSaved)
   }
 
   onOptionSelected(option: string): void {
@@ -145,6 +147,7 @@ saveQuiz() {
   this.isSavePressed = true;
   this.isQuizVisible = false;
   console.log(this.submittedQuizId)
+  console.log(this.isQuizSaved)
 }
 
 onCloseSave(){
@@ -154,8 +157,11 @@ onCloseSave(){
 
 closeReplay(){
   this.closePlayer.emit();
-  console.log("works")
-}
+  }
+
+  onQuizSaved(isSaved : boolean){
+    this.isQuizSaved = isSaved;
+  }
 
 
 }

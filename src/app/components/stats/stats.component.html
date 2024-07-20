@@ -1,6 +1,6 @@
 
 
-    <div class="container mt-0">
+    <div *ngIf="stats && stats.gamePlayed && stats.gamePlayed > 0; else noQuizzes" class="container mt-0">
     <div class="card">
     <div class="card-header">
         Statistics for {{selectedUsername}}
@@ -57,6 +57,18 @@
       </div>
 </div>
 </div>
+
+
+<ng-template #noQuizzes>
+<div class="container mt-0">
+    <div class="card">
+    <div class="card-body">
+        There are no quizzes on record.
+</div>
+</div>
+</div>
+</ng-template>
+
 
 
 

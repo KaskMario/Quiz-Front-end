@@ -22,12 +22,15 @@ import { SavedQuiz } from '../../models/savedQuiz';
 export class SavequizComponent implements OnInit{
   @Input() savedQuestions : string = "";
   @Input() submittedQuizId! : number;
+  @Input() isQuizSaved! : boolean;
   @Output() closeIt = new EventEmitter<void>();
+  @Output() isSaved = new EventEmitter<boolean>();
 
   description : string ="";
   loggedInUsername : string ="";
   user !: User;
   savedQuizz : SavedQuiz;
+ 
 
 
   constructor(private quizService: QuizService,
@@ -60,22 +63,22 @@ export class SavequizComponent implements OnInit{
 
 
 saveQuiz(){
+  if(this.isQuizSaved){
+    console.log(this.isQuizSaved);
+    alert("Your quiz is already saved.")
+  }else{
   this.savedQuizz.questions = this.savedQuestions;
   this.savedQuizz.description = this.description;
   
     console.log(this.savedQuizz.description, this.user.id);
   this.quizService.saveQuiz(this.savedQuizz, this.submittedQuizId, this.user.id ).subscribe(
     (response) => {
-            alert('quiz saved');
+            alert('You have saved your quiz.');
+            this.isQuizSaved = true;
+            this.isSaved.emit(this.isQuizSaved);
             this.closeSave();
-    },
-    (error) => {
-      alert(`Error saving: ${error}`);
-    }
-  );
-
-  
-
+    });
+  }
 }
 
 closeSave() {

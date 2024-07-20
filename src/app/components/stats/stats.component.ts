@@ -4,13 +4,15 @@ import { StatsService } from '../../service/stats.service';
 import { AuthService } from '../../service/authService';
 import { Observable, tap } from 'rxjs';
 import { ResultsByCategory } from '../../models/resultsByCategory';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
+
 
 
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, NgIf, CommonModule],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.css'
 })

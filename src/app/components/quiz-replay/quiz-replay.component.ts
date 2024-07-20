@@ -6,12 +6,15 @@ import { UsersService } from '../../service/users.service';
 import { User } from '../../models/user';
 import { NgFor, NgIf } from '@angular/common';
 import { QuizPlayerComponent } from '../quiz-player/quiz-player.component';
+import { ErrorService } from '../../service/errorService';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-quiz-replay',
   standalone: true,
-  imports: [NgFor, NgIf, QuizPlayerComponent],
+  imports: [NgFor, NgIf, QuizPlayerComponent, DatePipe],
   templateUrl: './quiz-replay.component.html',
   styleUrl: './quiz-replay.component.css'
 })
@@ -35,17 +38,12 @@ export class QuizReplayComponent implements OnInit{
   constructor(private quizService: QuizService, 
               private authService : AuthService,
               private usersService : UsersService,
+              private errorService : ErrorService
     ) {}
 
 
 ngOnInit(): void {
   this.getUsernameAndUser();
-
-
-  
-  
- 
-  
 }
 
 
@@ -116,25 +114,19 @@ onCloseReplay(){
 
 deleteSavedQuiz() {
   if (this.selectedQuizId) {
-    if (confirm('Are you sure you want to delete this question?')) {
+    if (confirm('Are you sure you want to delete this saved quiz?')) {
       this.quizService.deleteSavedQuiz(this.selectedQuizId).subscribe(
         response => {
-          alert(response.message || 'Question deleted successfully');
+          alert(response.message || 'Quiz deleted.');
           this.getAllSaved(this.user.id);
                     
         },
-        error => {
-          if (error.status === 404) {
-            alert('Quiz not found');
-          } else {
-            alert(error.message || 'Failed to delete saved quiz');
-          }
+        (error: HttpErrorResponse) => {
+          this.errorService.handleError(error, "quiz");
         }
       );
     }
-  } else {
-    alert('No quiz selected');
-  }
+  } 
 }
   
 
