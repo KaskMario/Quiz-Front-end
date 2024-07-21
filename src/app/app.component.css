@@ -33,3 +33,14 @@
   }
 }
 
+@media (max-width: 768px) {
+  .mobile-margin {
+    margin-top: 1rem;
+  }
+
+  .mobile-buttons {
+    position: absolute;
+    justify-content: end !important;
+  }
+}
+
