@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StatsService } from '../../service/stats.service';
 import { QuizResult } from '../../models/quizResult';
 import { SavequizComponent } from '../savequiz/savequiz.component';
+import { Question } from '../../models/question';
 
 @Component({
   selector: 'quiz-player',
@@ -40,7 +41,7 @@ export class QuizPlayerComponent implements OnInit{
   isSubmitPressed: boolean = false;
   isResultSumbmitted : boolean = false;
   loggedInUsername : String = "";
-  savedQuestions : string = "";
+  savedQuestions : any[] = [];
   submittedQuizId! : number;
   isSavePressed : boolean = false;
   isQuizVisible : boolean = true;
@@ -90,7 +91,7 @@ export class QuizPlayerComponent implements OnInit{
   submitQuiz(): void {
     this.showResults = true;
     this.isSubmitPressed = true;
-    if(!this.isResultSumbmitted) {
+    if(!this.isResultSumbmitted && !this.isReplayMode) {
       this.submitResults();
        this.isResultSumbmitted = true;}
 }
@@ -138,12 +139,9 @@ submitResults(){
 }
 
 saveQuiz() {
-  const quizQuestions : string[]= [];
-  for (let i = 0; i < this.questions.length; i++) {
-    quizQuestions[i] = this.questions[i].id;
-    }
-  console.log(quizQuestions.join('x'));
-  this.savedQuestions = quizQuestions.join('x');
+  
+  this.savedQuestions = this.questions;
+  console.log(this.savedQuestions);
   this.isSavePressed = true;
   this.isQuizVisible = false;
   console.log(this.submittedQuizId)

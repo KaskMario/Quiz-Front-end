@@ -24,7 +24,7 @@
         <div class="col">
 
             <div class="btn-group-sm" *ngIf="showButtons(savedQuiz.id!)">
-                <button type="button" class="btn btn-primary me-2" (click)="replay(savedQuiz.questions!)">Take it again</button>
+                <button type="button" class="btn btn-primary me-2" (click)="replay()">Take it again</button>
                 <button type="button" class="btn btn-danger me-2"(click)="deleteSavedQuiz()">Delete</button>
             </div>
 

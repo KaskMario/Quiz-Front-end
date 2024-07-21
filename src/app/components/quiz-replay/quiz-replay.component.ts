@@ -31,6 +31,8 @@ export class QuizReplayComponent implements OnInit{
   isPlayerHidden : boolean = true;
   isSavedQuizzesVisible : boolean = true;
   isReplayMode : boolean = true;
+  selectedQuiz : SavedQuiz | undefined;
+  savedQuestions : string = "";
   
 
 
@@ -77,18 +79,26 @@ getUser(username : string) : void {
       },)
   }
 
-  replay(quizQuestions : string){
-    this.fetchQuizQuestions(quizQuestions);
-    this.isPlayerHidden = false;
+  replay(){
+    this.selectedQuiz = this.savedQuizzes.find(quiz => quiz.id === this.selectedQuizId);
+    console.log(this.selectedQuizId);
+    console.log(this.selectedQuiz);
+    if (this.selectedQuiz){
+        const quizQuestions: number[] = this.selectedQuiz.questions.map(question => question.id);
+        console.log(quizQuestions);
+        this.savedQuestions = quizQuestions.join('x');
+        
+        console.log(this.savedQuestions)
+        
+        this.fetchQuizQuestions(this.savedQuestions);
+        this.isPlayerHidden = false;
     this.isSavedQuizzesVisible = false;
-    console.log(this.questions)
-  }
 
-  deleteSelected(quizId : number){
+    } else {console.error("Selected quiz not found.");}
+    }
 
-  }
-
-  showButtons(quizId: number): boolean {
+  
+    showButtons(quizId: number): boolean {
     return this.selectedQuizId === quizId;  
     }
 

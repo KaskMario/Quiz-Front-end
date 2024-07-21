@@ -6,7 +6,7 @@ import { AuthService } from '../../service/authService';
 import { UsersService } from '../../service/users.service';
 import { User } from '../../models/user';
 import { SavedQuiz } from '../../models/savedQuiz';
-
+import { Question } from '../../models/question';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { SavedQuiz } from '../../models/savedQuiz';
 
 
 export class SavequizComponent implements OnInit{
-  @Input() savedQuestions : string = "";
+  @Input() savedQuestions : any[] = [];
   @Input() submittedQuizId! : number;
   @Input() isQuizSaved! : boolean;
   @Output() closeIt = new EventEmitter<void>();
@@ -67,17 +67,21 @@ saveQuiz(){
     console.log(this.isQuizSaved);
     alert("Your quiz is already saved.")
   }else{
-  this.savedQuizz.questions = this.savedQuestions;
-  this.savedQuizz.description = this.description;
+    if(this.savedQuestions){
+        this.savedQuizz.questions = this.savedQuestions;
+        this.savedQuizz.description = this.description;
+        
+
   
-    console.log(this.savedQuizz.description, this.user.id);
-  this.quizService.saveQuiz(this.savedQuizz, this.submittedQuizId, this.user.id ).subscribe(
-    (response) => {
+        console.log(this.savedQuizz, this.user.id);
+         this.quizService.saveQuiz(this.savedQuizz, this.submittedQuizId, this.user.id ).subscribe(
+        (response) => {
             alert('You have saved your quiz.');
             this.isQuizSaved = true;
             this.isSaved.emit(this.isQuizSaved);
             this.closeSave();
     });
+  }
   }
 }
 

@@ -6,13 +6,14 @@ import { Observable, tap } from 'rxjs';
 import { ResultsByCategory } from '../../models/resultsByCategory';
 import { NgFor, NgIf } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [NgFor, NgIf, CommonModule],
+  imports: [NgFor, NgIf, CommonModule, DatePipe],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.css'
 })

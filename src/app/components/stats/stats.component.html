@@ -52,8 +52,8 @@
         </div>
     </div>
 
-      <div class="card-footer text-muted">
-        Last time played: {{stats.lastTimePlayed}}
+      <div class="card-footer text-muted" *ngIf="stats && stats.lastTimePlayed" >
+        Last time played: {{stats.lastTimePlayed | date: "dd-MM-yyyy HH:mm" }}
       </div>
 </div>
 </div>

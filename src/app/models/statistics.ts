@@ -6,6 +6,6 @@ export interface Stats{
     mediumScore? : number,
     hardScore? : number,
     flawlessCount? : number,
-    lastTimePlayed? : String
+    lastTimePlayed? : string
 
 }
