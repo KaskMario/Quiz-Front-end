@@ -29,7 +29,7 @@ export class CreateQuizComponent implements OnInit {
   quizForm: FormGroup;
   questions: any[] = [];
   quizCreated: boolean = false;
-  numberOfQuestions = [10,20];
+  numberOfQuestions = [5,10];
   difficultyLevels: string[] = [];
   outputCategory : String = "";
   outputDifficulty : String = "";

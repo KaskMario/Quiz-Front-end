@@ -4,6 +4,8 @@ import { NgForOf, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Question } from '../../models/question';
 import { AuthService } from '../../service/authService';
+import {QuizService} from "../../service/quizService";
+
 
 @Component({
   selector: 'app-question',
@@ -20,7 +22,7 @@ export class QuestionComponent implements OnInit {
 
   questions: any[] = [];
   unapprovedQuestions: Question[] = [];
-  uniqueCategories: string[] = [];
+  uniqueCategories: any[] = [];
   addQuestionForm: FormGroup;
   selectedQuestion: any = null;
   editQuestionForm: FormGroup;
@@ -34,7 +36,9 @@ export class QuestionComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private questionService: QuestionService,
-    private authService: AuthService
+    private authService: AuthService,
+    private quizService: QuizService
+
   ) {
     this.addQuestionForm = this.formBuilder.group({
       title: ['', Validators.required],
@@ -62,7 +66,7 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedQuestion = null;
-    this.getQuestions();
+    this.getQuestionsAndCategories();
     this.authService.getUserRole().subscribe(role => {
       this.userRole = role;
       if (role === 'ROLE_ADMIN') {
@@ -71,11 +75,15 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  getQuestions(): void {
+  getQuestionsAndCategories(): void {
     this.questionService.getAllQuestions().subscribe(
       (questions) => {
         this.questions = questions;
-        this.uniqueCategories = this.getUniqueCategories(questions);
+        this.quizService.getCategories().subscribe(
+          (categories) => {
+            this.uniqueCategories =categories;
+          }
+        );
       }
     );
   }
@@ -136,7 +144,8 @@ export class QuestionComponent implements OnInit {
 
   saveAddedQuestion(): void {
     const newQuestion = {
-      ...this.editQuestionForm.getRawValue()
+      ...this.editQuestionForm.getRawValue(),
+      approved: this.userRole === 'ROLE_ADMIN'
     };
     delete newQuestion.id;
 
@@ -144,7 +153,7 @@ export class QuestionComponent implements OnInit {
       (response) => {
         this.questions.push(response);
         this.isEditVisible = false;
-        this.ngOnInit()
+      //  this.ngOnInit()
         alert('Question added successfully');
       },
       (error) => {
@@ -197,12 +206,6 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  viewQuestion(question: Question): void {
-    this.selectedQuestion = question;
-    this.isEditVisible = true;
-    this.isAddPressed = false;
-    this.editQuestionForm.patchValue(this.selectedQuestion);
-  }
 
   viewUnapprovedQuestion(question: Question): void {
     this.selectedQuestion = question;
@@ -219,11 +222,9 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  getUniqueCategories(questions: any[]): string[] {
-    const categories = questions.map(question => question.category);
-    return [...new Set(categories)];
-  }
-
   onSubmit(): void {
+   // if(this.userRole==="ROLE_ADMIN"){
+   //   this.saveAddedQuestion()
+   // }
   }
 }

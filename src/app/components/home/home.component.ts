@@ -10,5 +10,5 @@ import {RouterLink} from "@angular/router";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  // Any necessary component logic can go here
+
 }
